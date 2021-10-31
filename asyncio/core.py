@@ -1,7 +1,7 @@
 # MicroPython uasyncio module
 # MIT license; Copyright (c) 2019 Damien P. George
 
-from time import ticks_ms as ticks, ticks_diff, ticks_add
+from adafruit_ticks import ticks_ms as ticks, ticks_diff, ticks_add
 import sys, select
 
 # Import TaskQueue and Task, preferring built-in C code over Python code
@@ -37,6 +37,9 @@ class SingletonGenerator:
         self.exc = StopIteration()
 
     def __iter__(self):
+        return self
+
+    def __await__(self):
         return self
 
     def __next__(self):
