@@ -4,6 +4,12 @@
 #
 # MicroPython uasyncio module
 # MIT license; Copyright (c) 2019-2020 Damien P. George
+#
+# This code comes from MicroPython, and has not been run through black or pylint there.
+# Altering these files significantly would make merging difficult, so we will not use
+# pylint or black.
+# pylint: skip-file
+# fmt: off
 
 from . import core
 
@@ -11,7 +17,9 @@ from . import core
 class Event:
     def __init__(self):
         self.state = False  # False=unset; True=set
-        self.waiting = core.TaskQueue()  # Queue of Tasks waiting on completion of this event
+        self.waiting = (
+            core.TaskQueue()
+        )  # Queue of Tasks waiting on completion of this event
 
     def is_set(self):
         return self.state

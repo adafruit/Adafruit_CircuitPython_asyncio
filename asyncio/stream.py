@@ -4,6 +4,12 @@
 #
 # MicroPython uasyncio module
 # MIT license; Copyright (c) 2019-2020 Damien P. George
+#
+# This code comes from MicroPython, and has not been run through black or pylint there.
+# Altering these files significantly would make merging difficult, so we will not use
+# pylint or black.
+# pylint: skip-file
+# fmt: off
 
 from . import core
 
@@ -83,7 +89,9 @@ async def open_connection(host, port):
     from uerrno import EINPROGRESS
     import usocket as socket
 
-    ai = socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM)[0]  # TODO this is blocking!
+    ai = socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM)[
+        0
+    ]  # TODO this is blocking!
     s = socket.socket(ai[0], ai[1], ai[2])
     s.setblocking(False)
     ss = Stream(s)

@@ -57,10 +57,7 @@ setup(
     ],
     # What does your project relate to?
     keywords="adafruit blinka circuitpython micropython asyncio async",
-
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    # TODO: IF LIBRARY FILES ARE A PACKAGE FOLDER,
-    #       CHANGE `py_modules=['...']` TO `packages=['...']`
-    py_modules=["adafruit_asyncio"],
+    packages=["asyncio"],
 )

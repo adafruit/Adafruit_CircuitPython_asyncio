@@ -4,6 +4,12 @@
 #
 # MicroPython uasyncio module
 # MIT license; Copyright (c) 2019 Damien P. George
+#
+# This code comes from MicroPython, and has not been run through black or pylint there.
+# Altering these files significantly would make merging difficult, so we will not use
+# pylint or black.
+# pylint: skip-file
+# fmt: off
 
 from adafruit_ticks import ticks_ms as ticks, ticks_diff, ticks_add
 import sys, select
