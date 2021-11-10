@@ -3,10 +3,6 @@
 # SPDX-License-Identifier: Unlicense
 
 repos:
--   repo: https://github.com/python/black
-    rev: 20.8b1
-    hooks:
-    - id: black
 -   repo: https://github.com/fsfe/reuse-tool
     rev: v0.12.1
     hooks:
@@ -17,13 +13,6 @@ repos:
     -   id: check-yaml
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
--   repo: https://github.com/pycqa/pylint
-    rev: pylint-2.7.1
-    hooks:
-    -   id: pylint
-        name: pylint (library code)
-        types: [python]
-        exclude: "^(docs/|examples/|tests/|setup.py$)"
 -   repo: local
     hooks:
     -   id: pylint_examples
