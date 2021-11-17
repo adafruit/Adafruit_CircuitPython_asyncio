@@ -12,7 +12,7 @@
 # fmt: off
 
 from adafruit_ticks import ticks_ms as ticks, ticks_diff, ticks_add
-import sys, select
+import sys, select, traceback
 
 # Import TaskQueue and Task, preferring built-in C code over Python code
 try:
@@ -278,9 +278,8 @@ class Loop:
         return Loop._exc_handler
 
     def default_exception_handler(loop, context):
-        print(context["message"])
-        print("future:", context["future"], "coro=", context["future"].coro)
-        sys.print_exception(context["exception"])
+        exc = context["exception"]
+        traceback.print_exception(None, exc, exc.__traceback__)
 
     def call_exception_handler(context):
         (Loop._exc_handler or Loop.default_exception_handler)(Loop, context)
