@@ -53,7 +53,7 @@ jobs:
       run: |
         pre-commit run --all-files
     - name: Build assets
-      run: circuitpython-build-bundles --filename_prefix ${{ steps.repo-name.outputs.repo-name }} --library_location .
+      run: circuitpython-build-bundles --filename_prefix ${{ steps.repo-name.outputs.repo-name }} --library_location . --package_folder_prefix "adafruit_, asyncio"
     - name: Archive bundles
       uses: actions/upload-artifact@v2
       with:
