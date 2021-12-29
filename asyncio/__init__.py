@@ -13,7 +13,8 @@
 
 from .core import *
 
-__version__ = (3, 0, 0)
+__version__ = "0.0.0-auto.0"
+__repo__ = "https://github.com/Adafruit/Adafruit_CircuitPython_asyncio.git"
 
 _attrs = {
     "wait_for": "funcs",
