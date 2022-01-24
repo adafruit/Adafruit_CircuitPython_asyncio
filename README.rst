@@ -3,7 +3,7 @@ Introduction
 
 
 .. image:: https://readthedocs.org/projects/adafruit-circuitpython-asyncio/badge/?version=latest
-    :target: https://circuitpython.readthedocs.io/projects/asyncio/en/latest/
+    :target: https://docs.circuitpython.org/projects/asyncio/en/latest/
     :alt: Documentation Status
 
 
