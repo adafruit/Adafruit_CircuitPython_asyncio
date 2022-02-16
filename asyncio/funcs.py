@@ -73,7 +73,7 @@ async def wait_for(aw, timeout, sleep=core.sleep):
 
 def wait_for_ms(aw, timeout):
     """Similar to `wait_for` but *timeout* is an integer in milliseconds.
-    
+
     This is a coroutine, and a MicroPython extension.
     """
 
@@ -83,9 +83,9 @@ def wait_for_ms(aw, timeout):
 async def gather(*aws, return_exceptions=False):
     """Run all *aws* awaitables concurrently. Any *aws* that are not tasks
     are promoted to tasks.
-    
+
     Returns a list of return values of all *aws*
-    
+
     This is a coroutine.
     """
 

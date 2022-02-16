@@ -17,7 +17,7 @@ from . import core
 class Lock:
     """Create a new lock which can be used to coordinate tasks. Locks start in
     the unlocked state.
-    
+
     In addition to the methods below, locks can be used in an ``async with``
     statement.
     """
@@ -55,7 +55,7 @@ class Lock:
     async def acquire(self):
         """Wait for the lock to be in the unlocked state and then lock it in an
         atomic way. Only one task can acquire the lock at any one time.
-        
+
         This is a coroutine.
         """
 

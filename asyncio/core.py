@@ -70,7 +70,7 @@ class SingletonGenerator:
 # Use a SingletonGenerator to do it without allocating on the heap
 def sleep_ms(t, sgen=SingletonGenerator()):
     """Sleep for `t` milliseconds.
-    
+
     This is a coroutine, and a MicroPython extension.
     """
 
@@ -82,7 +82,7 @@ def sleep_ms(t, sgen=SingletonGenerator()):
 # Pause task execution for the given time (in seconds)
 def sleep(t):
     """Sleep for `t` seconds
-    
+
     This is a coroutine.
     """
 
@@ -167,7 +167,7 @@ def _promote_to_task(aw):
 # Create and schedule a new task from a coroutine
 def create_task(coro):
     """Create a new task from the given coroutine and schedule it to run.
-    
+
     Returns the corresponding `Task` object.
     """
 
@@ -254,10 +254,10 @@ def run_until_complete(main_task=None):
 # Create a new task from a coroutine and run it until it finishes
 def run(coro):
     """Create a new task from the given coroutine and run it until it completes.
-    
+
     Returns the value returned be *coro*.
     """
-    
+
     return run_until_complete(create_task(coro))
 
 
@@ -354,7 +354,7 @@ def current_task():
 
 def new_event_loop():
     """Reset the event loop and return it.
-    
+
     **NOTE**: Since MicroPython only has a single event loop, this function just resets
     the loop's state, it does not create a new one
     """

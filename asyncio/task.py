@@ -133,7 +133,7 @@ class Task:
     """This object wraps a coroutine into a running task. Tasks can be waited on
     using ``await task``, which will wait for the task to complete and reutnr the
     return value of the task.
-    
+
     Tasks should not be created directly, rather use `create_task` to create them.
     """
 
@@ -170,7 +170,7 @@ class Task:
 
     def done(self):
         """Whether the task is complete."""
-        
+
         return not self.state
 
     def cancel(self):
