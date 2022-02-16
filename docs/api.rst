@@ -8,5 +8,24 @@
 .. automodule:: asyncio
     :members:
 
-.. toctree::
-   :hidden:
+.. automodule:: asyncio.core
+    :members:
+    :exclude-members: SingletonGenerator, IOQueue
+
+.. automodule:: asyncio.event
+    :members:
+    :exclude-members: ThreadSafeFlag
+
+.. automodule:: asyncio.funcs
+    :members:
+
+.. automodule:: asyncio.lock
+    :members:
+
+.. automodule:: asyncio.stream
+    :members:
+    :exclude-members: stream_awrite
+
+.. automodule:: asyncio.task
+    :members:
+    :exclude-members: ph_meld, ph_pairing, ph_delete, TaskQueue
