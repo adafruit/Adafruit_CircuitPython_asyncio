@@ -31,7 +31,7 @@ async def wait_for(aw, timeout, sleep=core.sleep):
     if timeout is None:
         return await aw
 
-    def runner(waiter, aw):
+    async def runner(waiter, aw):
         nonlocal status, result
         try:
             result = await aw
