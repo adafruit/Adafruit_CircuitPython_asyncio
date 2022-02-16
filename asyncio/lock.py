@@ -15,6 +15,13 @@ from . import core
 
 # Lock class for primitive mutex capability
 class Lock:
+    """Create a new lock which can be used to coordinate tasks. Locks start in
+    the unlocked state.
+    
+    In addition to the methods below, locks can be used in an ``async with``
+    statement.
+    """
+
     def __init__(self):
         # The state can take the following values:
         # - 0: unlocked
@@ -25,9 +32,16 @@ class Lock:
         self.waiting = core.TaskQueue()
 
     def locked(self):
+        """Returns ``True`` if the lock is locked, otherwise ``False``."""
+
         return self.state == 1
 
     def release(self):
+        """Release the lock. If any tasks are waiting on the lock then the next
+        one in the queue is scheduled to run and the lock remains locked. Otherwise,
+        no tasks are waiting and the lock becomes unlocked.
+        """
+
         if self.state != 1:
             raise RuntimeError("Lock not acquired")
         if self.waiting.peek():
@@ -39,6 +53,12 @@ class Lock:
             self.state = 0
 
     async def acquire(self):
+        """Wait for the lock to be in the unlocked state and then lock it in an
+        atomic way. Only one task can acquire the lock at any one time.
+        
+        This is a coroutine.
+        """
+
         if self.state != 0:
             # Lock unavailable, put the calling Task on the waiting queue
             self.waiting.push_head(core.cur_task)

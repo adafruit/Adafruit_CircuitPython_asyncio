@@ -130,6 +130,13 @@ class TaskQueue:
 
 # Task class representing a coroutine, can be waited on and cancelled.
 class Task:
+    """This object wraps a coroutine into a running task. Tasks can be waited on
+    using ``await task``, which will wait for the task to complete and reutnr the
+    return value of the task.
+    
+    Tasks should not be created directly, rather use `create_task` to create them.
+    """
+
     def __init__(self, coro, globals=None):
         self.coro = coro  # Coroutine of this Task
         self.data = None  # General data for queue it is waiting on
@@ -162,9 +169,15 @@ class Task:
             core.cur_task.data = self
 
     def done(self):
+        """Whether the task is complete."""
+        
         return not self.state
 
     def cancel(self):
+        """Cancel the task by injecting a ``CancelledError`` into it. The task
+        may or may not ignore this exception.
+        """
+
         # Check if task is already finished.
         if not self.state:
             return False

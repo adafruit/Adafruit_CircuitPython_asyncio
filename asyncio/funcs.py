@@ -15,6 +15,18 @@ from . import core
 
 
 async def wait_for(aw, timeout, sleep=core.sleep):
+    """Wait for the *aw* awaitable to complete, but cancel if it takes longer
+    than *timeout* seconds. If *aw* is not a task then a task will be created
+    from it.
+
+    If a timeout occurs, it cancels the task and raises ``asyncio.TimeoutError``:
+    this should be trapped by the caller.
+
+    Returns the return vaalue of *aw*.
+
+    This is a coroutine.
+    """
+
     aw = core._promote_to_task(aw)
     if timeout is None:
         return await aw
@@ -60,10 +72,23 @@ async def wait_for(aw, timeout, sleep=core.sleep):
 
 
 def wait_for_ms(aw, timeout):
+    """Similar to `wait_for` but *timeout* is an integer in milliseconds.
+    
+    This is a coroutine, and a MicroPython extension.
+    """
+
     return wait_for(aw, timeout, core.sleep_ms)
 
 
 async def gather(*aws, return_exceptions=False):
+    """Run all *aws* awaitables concurrently. Any *aws* that are not tasks
+    are promoted to tasks.
+    
+    Returns a list of return values of all *aws*
+    
+    This is a coroutine.
+    """
+
     ts = [core._promote_to_task(aw) for aw in aws]
     for i in range(len(ts)):
         try:

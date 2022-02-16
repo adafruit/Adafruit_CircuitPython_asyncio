@@ -15,6 +15,10 @@ from . import core
 
 # Event class for primitive events that can be waited on, set, and cleared
 class Event:
+    """Create a new event which can be used to synchronize tasks. Events
+    start in the cleared state.
+    """
+
     def __init__(self):
         self.state = False  # False=unset; True=set
         self.waiting = (
@@ -22,9 +26,14 @@ class Event:
         )  # Queue of Tasks waiting on completion of this event
 
     def is_set(self):
+        """Returns ``True`` if the event is set, ``False`` otherwise."""
+
         return self.state
 
     def set(self):
+        """Set the event. Any tasks waiting on the event will be scheduled to run.
+        """
+
         # Event becomes set, schedule any tasks waiting on it
         # Note: This must not be called from anything except the thread running
         # the asyncio loop (i.e. neither hard or soft IRQ, or a different thread).
@@ -33,9 +42,17 @@ class Event:
         self.state = True
 
     def clear(self):
+        """Clear the event."""
+
         self.state = False
 
     async def wait(self):
+        """Wait for the event to be set. If the event is already set then it returns
+        immediately.
+
+        This is a coroutine.
+        """
+
         if not self.state:
             # Event not set, put the calling task on the event's waiting queue
             self.waiting.push_head(core.cur_task)
