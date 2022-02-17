@@ -69,7 +69,7 @@ class SingletonGenerator:
 # Pause task execution for the given time (integer in milliseconds, uPy extension)
 # Use a SingletonGenerator to do it without allocating on the heap
 def sleep_ms(t, sgen=SingletonGenerator()):
-    """Sleep for `t` milliseconds.
+    """Sleep for *t* milliseconds.
 
     This is a coroutine, and a MicroPython extension.
     """
@@ -81,7 +81,7 @@ def sleep_ms(t, sgen=SingletonGenerator()):
 
 # Pause task execution for the given time (in seconds)
 def sleep(t):
-    """Sleep for `t` seconds
+    """Sleep for *t* seconds
 
     This is a coroutine.
     """
@@ -180,7 +180,7 @@ def create_task(coro):
 
 # Keep scheduling tasks until there are none left to schedule
 def run_until_complete(main_task=None):
-    """Run the given _main_task_ until it completes."""
+    """Run the given *main_task* until it completes."""
 
     global cur_task
     excs_all = (CancelledError, Exception)  # To prevent heap allocation in loop
@@ -283,7 +283,7 @@ class Loop:
         return create_task(coro)
 
     def run_forever():
-        """Run the event loop until `stop()` is called."""
+        """Run the event loop until `Loop.stop()` is called."""
 
         global _stop_task
         _stop_task = Task(_stopper(), globals())

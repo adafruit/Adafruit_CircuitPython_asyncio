@@ -131,10 +131,10 @@ class TaskQueue:
 # Task class representing a coroutine, can be waited on and cancelled.
 class Task:
     """This object wraps a coroutine into a running task. Tasks can be waited on
-    using ``await task``, which will wait for the task to complete and reutnr the
+    using ``await task``, which will wait for the task to complete and return the
     return value of the task.
 
-    Tasks should not be created directly, rather use `create_task` to create them.
+    Tasks should not be created directly, rather use ``create_task`` to create them.
     """
 
     def __init__(self, coro, globals=None):
