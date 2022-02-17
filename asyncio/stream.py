@@ -56,7 +56,8 @@ class Stream:
         This is a coroutine.
         """
 
-        yield core._io_queue.queue_read(self.s)
+        core._io_queue.queue_read(self.s)
+        await core.sleep(0)
         return self.s.read(n)
 
     async def readinto(self, buf):
@@ -67,7 +68,8 @@ class Stream:
         This is a coroutine, and a MicroPython extension.
         """
 
-        yield core._io_queue.queue_read(self.s)
+        core._io_queue.queue_read(self.s)
+        await core.sleep(0)
         return self.s.readinto(buf)
 
     async def readexactly(self, n):
@@ -81,7 +83,8 @@ class Stream:
 
         r = b""
         while n:
-            yield core._io_queue.queue_read(self.s)
+            core._io_queue.queue_read(self.s)
+            await core.sleep(0)
             r2 = self.s.read(n)
             if r2 is not None:
                 if not len(r2):
@@ -98,7 +101,8 @@ class Stream:
 
         l = b""
         while True:
-            yield core._io_queue.queue_read(self.s)
+            core._io_queue.queue_read(self.s)
+            await core.sleep(0)
             l2 = self.s.readline()  # may do multiple reads but won't block
             l += l2
             if not l2 or l[-1] == 10:  # \n (check l in case l2 is str)
@@ -158,7 +162,8 @@ async def open_connection(host, port):
     except OSError as er:
         if er.errno != EINPROGRESS:
             raise er
-    yield core._io_queue.queue_write(s)
+    core._io_queue.queue_write(s)
+    await core.sleep(0)
     return ss, ss
 
 
