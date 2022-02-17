@@ -10,6 +10,10 @@
 # pylint or black.
 # pylint: skip-file
 # fmt: off
+"""
+Locks
+=====
+"""
 
 from . import core
 

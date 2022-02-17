@@ -10,6 +10,10 @@
 # pylint or black.
 # pylint: skip-file
 # fmt: off
+"""
+Tasks
+=====
+"""
 
 # This file contains the core TaskQueue based on a pairing heap, and the core Task class.
 # They can optionally be replaced by C implementations.

@@ -10,6 +10,10 @@
 # pylint or black.
 # pylint: skip-file
 # fmt: off
+"""
+Core
+====
+"""
 
 from adafruit_ticks import ticks_ms as ticks, ticks_diff, ticks_add
 import sys, select, traceback

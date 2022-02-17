@@ -10,6 +10,11 @@
 # pylint or black.
 # pylint: skip-file
 # fmt: off
+"""
+Functions
+=========
+"""
+
 
 from . import core
 

@@ -10,6 +10,10 @@
 # pylint or black.
 # pylint: skip-file
 # fmt: off
+"""
+Streams
+=======
+"""
 
 from . import core
 
