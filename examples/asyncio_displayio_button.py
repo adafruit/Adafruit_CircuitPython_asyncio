@@ -112,13 +112,13 @@ class Interval:
 # main group to show things on the display
 main_group = displayio.Group()
 
-# Initialze first circle
+# Initialize first circle
 palette_1 = displayio.Palette(2)
 palette_1[0] = 0x125690
 palette_1[1] = 0x125690
 circle_1 = vectorio.Circle(pixel_shader=palette_1, radius=15, x=20, y=20)
 
-# Initialze second circle
+# Initialize second circle
 palette_2 = displayio.Palette(2)
 palette_2[0] = 0x12FF30
 palette_2[1] = 0x12FF30
@@ -171,108 +171,123 @@ async def blink(palette, interval, count, button_state):  # Don't forget the asy
             count -= 1
 
 
-async def monitor_color_button(button, button_state):
+def handle_color_button(touch_event, color_button, button_state):
     """
-    monitor_color_button coroutine. Checks if the color button
-    is pressed, and updates the ButtonState data object as appropriate
+    Check if the color button is pressed, and updates
+    the ButtonState data object as appropriate
 
-    :param Button button: The button to check for presses on
+    :param touch_event: The touch point object from touchscreen
+    :param Button color_button: The button to check for presses on
     :param ButtonState button_state: ButtonState data object to set
      the current value into
     """
-    while True:
-        # get current touch data from overlay
-        p = ts.touch_point
 
-        # if there are any touch events
-        if p:
-            # if the color button is being touched
-            if button.contains(p):
-                # set selected to change button color
-                button.selected = True
-                # set button_state so other coroutines can access it
-                button_state.state = True
+    # if there is a touch event
+    if touch_event:
 
-            # the color button is not being touched
-            else:
-                # set selected to change button color back to default
-                button.selected = False  # if touch is dragged outside of button
-                # set button_state so other coroutines can access it.
-                button_state.state = False
+        # if the color button is being touched
+        if color_button.contains(touch_event):
+            # set selected to change button color
+            color_button.selected = True
+            # set button_state so other coroutines can access it
+            button_state.state = True
 
-        # there are no touch events
+        # the color button is not being touched
         else:
-            # if the color button is currently the pressed color
-            if button.selected:
-                # set selected back to false to change button back to default color
-                button.selected = False
-                # set button_state so other coroutines can access it
-                button_state.state = False
+            # set selected to change button color back to default
+            color_button.selected = False  # if touch is dragged outside of button
+            # set button_state so other coroutines can access it.
+            button_state.state = False
 
-        # give other tasks the opportunity to work
-        await asyncio.sleep(0)
+    # there are no touch events
+    else:
+        # if the color button is currently the pressed color
+        if color_button.selected:
+            # set selected back to false to change button back to default color
+            color_button.selected = False
+            # set button_state so other coroutines can access it
+            button_state.state = False
 
 
-async def monitor_interval_buttons(button_slower, button_faster, interval):
+def handle_interval_buttons(touch_event, button_slower, button_faster, interval):
     """
-    monitor_interval_buttons coroutine. Will check for presses on
+    Will check for presses on
     the faster and slower buttons and updated the data in the
     Interval data object as appropriate
 
+    :param touch_event: Touch point object from touchscreen
     :param Button button_slower: The slower button object
     :param Button button_faster: The faster button object
-    :param Interval interval: the Interval data object to store state
+    :param Interval interval: The Interval data object to store state
+    """
+    # if there are any touch events
+    if touch_event:
+        # if the slower button is being touched
+        if button_slower.contains(touch_event):
+            # if it just became pressed. i.e. was not pressed last frame
+            if not button_slower.selected:
+                # set selected to change the button color
+                button_slower.selected = True
+
+                # increment the interval length and store it on the data object
+                interval.value += 100
+                print("new interval val: {}".format(interval.value))
+
+        # if the slower button is not being touched
+        else:
+            # set selected to put the slower button back to default color
+            button_slower.selected = False
+
+        # if the faster button is being touched
+        if button_faster.contains(touch_event):
+            # if it just became pressed. i.e. was not pressed last frame
+            if not button_faster.selected:
+                # set selected to change the button color
+                button_faster.selected = True
+                # if the interval is large enough to decrement
+                if interval.value >= 100:
+                    # decrement interval value and store it on the data object
+                    interval.value -= 100
+                print("new interval val: {}".format(interval.value))
+
+        # if the faster button is not being touched
+        else:
+            # set selected back to false to change color back to default
+            button_faster.selected = False
+
+    # there are no touch events
+    else:
+        # if slower button is the pressed color
+        if button_slower.selected:
+            # set it back to default color
+            button_slower.selected = False
+
+        # if the faster button is pressed color
+        if button_faster.selected:
+            # set it back to default color
+            button_faster.selected = False
+
+
+async def monitor_buttons(
+    button_slower, button_faster, color_button, interval, button_state
+):
+    """
+    monitor_buttons coroutine.
+
+    :param Button button_slower: The slower button object
+    :param Button button_faster: The faster button object
+    :param Button color_button: The invert color button object
+    :param Interval interval: The Interval data object to store state
+    :param ButtonState button_state: The ButtonState data object to
+     store color button state
     """
     while True:
         # get current touch data from overlay
         p = ts.touch_point
 
-        # if there are any touch events
-        if p:
-            # if the slower button is being touched
-            if button_slower.contains(p):
-                # if it just became pressed. i.e. was not pressed last frame
-                if not button_slower.selected:
-                    # set selected to change the button color
-                    button_slower.selected = True
-
-                    # increment the interval length and store it on the data object
-                    interval.value += 100
-                    print("new interval val: {}".format(interval.value))
-
-            # if the slower button is not being touched
-            else:
-                # set selected to put the slower button back to default color
-                button_slower.selected = False
-
-            # if the faster button is being touched
-            if button_faster.contains(p):
-                # if it just became pressed. i.e. was not pressed last frame
-                if not button_faster.selected:
-                    # set selected to change the button color
-                    button_faster.selected = True
-                    # if the interval is large enough to decrement
-                    if interval.value >= 100:
-                        # decrement interval value and store it on the data object
-                        interval.value -= 100
-                    print("new interval val: {}".format(interval.value))
-
-            # if the faster button is not being touched
-            else:
-                # set selected back to false to change color back to default
-                button_faster.selected = False
-
-        # there are no touch events
-        else:
-            # if slower button is the pressed color
-            if button_slower.selected:
-                # set it back to default color
-                button_slower.selected = False
-
-            # if the faster button is pressed color
-            if button_faster.selected:
-                # set it back to default color
-                button_faster.selected = False
+        # handle touch event data
+        handle_color_button(p, color_button, button_state)
+        handle_interval_buttons(p, button_slower, button_faster, interval)
 
         # allow other tasks to do work
         await asyncio.sleep(0)
@@ -281,27 +296,32 @@ async def monitor_interval_buttons(button_slower, button_faster, interval):
 # main coroutine
 async def main():  # Don't forget the async!
     # create data objects
-    btn_1_state = ButtonState(False)
+    color_btn_state = ButtonState(False)
     interval_1 = Interval(550)
     interval_2 = Interval(350)
 
     # create circle blink tasks
-    circle_1_task = asyncio.create_task(blink(palette_1, interval_1, -1, btn_1_state))
-    circle_2_task = asyncio.create_task(blink(palette_2, interval_2, 20, btn_1_state))
-
-    # create color button task
-    color_button_task = asyncio.create_task(
-        monitor_color_button(invert_color_btn, btn_1_state)
+    circle_1_task = asyncio.create_task(
+        blink(palette_1, interval_1, -1, color_btn_state)
+    )
+    circle_2_task = asyncio.create_task(
+        blink(palette_2, interval_2, 20, color_btn_state)
     )
 
-    # create interval buttons task
-    interval_1_task = asyncio.create_task(
-        monitor_interval_buttons(interval_slower_btn, interval_faster_btn, interval_1)
+    # create buttons task
+    button_task = asyncio.create_task(
+        monitor_buttons(
+            interval_slower_btn,
+            interval_faster_btn,
+            invert_color_btn,
+            interval_1,
+            color_btn_state,
+        )
     )
 
     # start all of the tasks
     await asyncio.gather(
-        circle_1_task, circle_2_task, color_button_task, interval_1_task
+        circle_1_task, circle_2_task, button_task
     )  # Don't forget the await!
 
 
