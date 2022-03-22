@@ -18,6 +18,9 @@ from adafruit_button import Button
 # use built-in display
 display = board.DISPLAY
 
+# explicitly set the display to default orientation in-case it was changed
+display.rotation = 0
+
 # --| Button Config |-------------------------------------------------
 # invert color Button
 BUTTON_1_X = 10
