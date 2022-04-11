@@ -27,7 +27,7 @@ async def wait_for(aw, timeout, sleep=core.sleep):
     If a timeout occurs, it cancels the task and raises ``asyncio.TimeoutError``:
     this should be trapped by the caller.
 
-    Returns the return vaalue of *aw*.
+    Returns the return value of *aw*.
 
     This is a coroutine.
     """
