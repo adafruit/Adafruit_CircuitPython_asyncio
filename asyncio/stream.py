@@ -219,7 +219,7 @@ class Server:
 # Helper function to start a TCP stream server, running as a new task
 # TODO could use an accept-callback on socket read activity instead of creating a task
 async def start_server(cb, host, port, backlog=5):
-    """Start a TCP server on the given *host* and *port*. The *cb* callback wil be
+    """Start a TCP server on the given *host* and *port*. The *cb* callback will be
     called with incoming, accepted connections, and be passed 2 arguments: reader
     writer streams for the connection.
 
