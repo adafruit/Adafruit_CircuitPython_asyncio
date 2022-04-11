@@ -259,7 +259,7 @@ def run_until_complete(main_task=None):
 def run(coro):
     """Create a new task from the given coroutine and run it until it completes.
 
-    Returns the value returned be *coro*.
+    Returns the value returned by *coro*.
     """
 
     return run_until_complete(create_task(coro))
