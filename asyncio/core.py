@@ -10,6 +10,10 @@
 # pylint or black.
 # pylint: skip-file
 # fmt: off
+"""
+Core
+====
+"""
 
 from adafruit_ticks import ticks_ms as ticks, ticks_diff, ticks_add
 import sys, select, traceback
@@ -26,10 +30,14 @@ except:
 
 
 class CancelledError(BaseException):
+    """Injected into a task when calling `Task.cancel()`"""
+
     pass
 
 
 class TimeoutError(Exception):
+    """Raised when waiting for a task longer than the specified timeout."""
+
     pass
 
 
@@ -65,6 +73,11 @@ class SingletonGenerator:
 # Pause task execution for the given time (integer in milliseconds, uPy extension)
 # Use a SingletonGenerator to do it without allocating on the heap
 def sleep_ms(t, sgen=SingletonGenerator()):
+    """Sleep for *t* milliseconds.
+
+    This is a coroutine, and a MicroPython extension.
+    """
+
     assert sgen.state is None, "Check for a missing `await` in your code"
     sgen.state = ticks_add(ticks(), max(0, t))
     return sgen
@@ -72,6 +85,11 @@ def sleep_ms(t, sgen=SingletonGenerator()):
 
 # Pause task execution for the given time (in seconds)
 def sleep(t):
+    """Sleep for *t* seconds
+
+    This is a coroutine.
+    """
+
     return sleep_ms(int(t * 1000))
 
 
@@ -152,6 +170,11 @@ def _promote_to_task(aw):
 
 # Create and schedule a new task from a coroutine
 def create_task(coro):
+    """Create a new task from the given coroutine and schedule it to run.
+
+    Returns the corresponding `Task` object.
+    """
+
     if not hasattr(coro, "send"):
         raise TypeError("coroutine expected")
     t = Task(coro, globals())
@@ -161,6 +184,8 @@ def create_task(coro):
 
 # Keep scheduling tasks until there are none left to schedule
 def run_until_complete(main_task=None):
+    """Run the given *main_task* until it completes."""
+
     global cur_task
     excs_all = (CancelledError, Exception)  # To prevent heap allocation in loop
     excs_stop = (CancelledError, StopIteration)  # To prevent heap allocation in loop
@@ -232,6 +257,11 @@ def run_until_complete(main_task=None):
 
 # Create a new task from a coroutine and run it until it finishes
 def run(coro):
+    """Create a new task from the given coroutine and run it until it completes.
+
+    Returns the value returned by *coro*.
+    """
+
     return run_until_complete(create_task(coro))
 
 
@@ -247,21 +277,33 @@ _stop_task = None
 
 
 class Loop:
+    """Class representing the event loop"""
+
     _exc_handler = None
 
     def create_task(coro):
+        """Create a task from the given *coro* and return the new `Task` object."""
+
         return create_task(coro)
 
     def run_forever():
+        """Run the event loop until `Loop.stop()` is called."""
+
         global _stop_task
         _stop_task = Task(_stopper(), globals())
         run_until_complete(_stop_task)
         # TODO should keep running until .stop() is called, even if there're no tasks left
 
     def run_until_complete(aw):
+        """Run the given *awaitable* until it completes.  If *awaitable* is not a task then
+        it will be promoted to one.
+        """
+
         return run_until_complete(_promote_to_task(aw))
 
     def stop():
+        """Stop the event loop"""
+
         global _stop_task
         if _stop_task is not None:
             _task_queue.push_head(_stop_task)
@@ -269,32 +311,58 @@ class Loop:
             _stop_task = None
 
     def close():
+        """Close the event loop."""
+
         pass
 
     def set_exception_handler(handler):
+        """Set the exception handler to call when a Task raises an exception that is not
+        caught.  The *handler* should accept two arguments: ``(loop, context)``
+        """
+
         Loop._exc_handler = handler
 
     def get_exception_handler():
+        """Get the current exception handler. Returns the handler, or ``None`` if no
+        custom handler is set.
+        """
+
         return Loop._exc_handler
 
     def default_exception_handler(loop, context):
+        """The default exception handler that is called."""
+
         exc = context["exception"]
         traceback.print_exception(None, exc, exc.__traceback__)
 
     def call_exception_handler(context):
+        """Call the current exception handler. The argument *context* is passed through
+        and is a dictionary containing keys:
+        ``'message'``, ``'exception'``, ``'future'``
+        """
         (Loop._exc_handler or Loop.default_exception_handler)(Loop, context)
 
 
 # The runq_len and waitq_len arguments are for legacy uasyncio compatibility
 def get_event_loop(runq_len=0, waitq_len=0):
+    """Return the event loop used to schedule and run tasks. See `Loop`."""
+
     return Loop
 
 
 def current_task():
+    """Return the `Task` object associated with the currently running task."""
+
     return cur_task
 
 
 def new_event_loop():
+    """Reset the event loop and return it.
+
+    **NOTE**: Since MicroPython only has a single event loop, this function just resets
+    the loop's state, it does not create a new one
+    """
+
     global _task_queue, _io_queue
     # TaskQueue of Task instances
     _task_queue = TaskQueue()
