@@ -62,7 +62,7 @@ class Event:
             self.waiting.push_head(core.cur_task)
             # Set calling task's data to the event's queue so it can be removed if needed
             core.cur_task.data = self.waiting
-            await core.sleep(0)
+            yield
         return True
 
 
