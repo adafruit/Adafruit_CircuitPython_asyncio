@@ -69,7 +69,6 @@ class SingletonGenerator:
             self.exc.__traceback__ = None
             raise self.exc
 
-
 # Pause task execution for the given time (integer in milliseconds, uPy extension)
 # Use a SingletonGenerator to do it without allocating on the heap
 def sleep_ms(t, sgen=SingletonGenerator()):
@@ -91,6 +90,34 @@ def sleep(t):
     """
 
     return sleep_ms(int(t * 1000))
+
+
+################################################################################
+# "Never schedule" object"
+# Don't re-schedule the object that awaits the _never singleton.
+# For internal use only. Some constructs, like `await event.wait()`,
+# work by NOT re-scheduling the task which calls wait(), but by
+# having some other task schedule it later.
+class _Never:
+    def __init__(self):
+        self.state = None
+        self.exc = StopIteration()
+
+    def __iter__(self):
+        return self
+
+    def __await__(self):
+        return self
+
+    def __next__(self):
+        if self.state is not None:
+            self.state = None
+            return None
+        else:
+           self.exc.__traceback__ = None
+           raise self.exc
+
+_never = _Never()
 
 
 ################################################################################

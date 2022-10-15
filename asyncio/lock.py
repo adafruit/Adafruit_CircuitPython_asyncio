@@ -69,7 +69,8 @@ class Lock:
             # Set calling task's data to the lock's queue so it can be removed if needed
             core.cur_task.data = self.waiting
             try:
-                yield
+                core._never.state = False
+                await core._never
             except core.CancelledError as er:
                 if self.state == core.cur_task:
                     # Cancelled while pending on resume, schedule next waiting Task
