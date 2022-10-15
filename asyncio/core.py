@@ -114,11 +114,11 @@ class _Never:
             self.state = None
             return None
         else:
-           self.exc.__traceback__ = None
-           raise self.exc
+            self.exc.__traceback__ = None
+            raise self.exc
+
 
 _never = _Never()
-
 
 ################################################################################
 # Queue and poller for stream IO
@@ -260,6 +260,11 @@ def run_until_complete(main_task=None):
                 if t.state is True:
                     # "None" indicates that the task is complete and not await'ed on (yet).
                     t.state = None
+                elif callable(t.state):
+                    # The task has a callback registered to be called on completion.
+                    t.state(t, er)
+                    t.state = False
+                    waiting = True
                 else:
                     # Schedule any other tasks waiting on the completion of this task.
                     while t.state.peek():
@@ -280,7 +285,6 @@ def run_until_complete(main_task=None):
                 _exc_context["exception"] = exc
                 _exc_context["future"] = t
                 Loop.call_exception_handler(_exc_context)
-
 
 # Create a new task from a coroutine and run it until it finishes
 def run(coro):
