@@ -18,8 +18,11 @@ Core
 from adafruit_ticks import ticks_ms as ticks, ticks_diff, ticks_add
 import sys, select, traceback
 
-# Import TaskQueue and Task, unconditionally preferring Python code
-from .task import TaskQueue, Task
+# Import TaskQueue and Task, preferring built-in C code over Python code
+try:
+    from _asyncio import TaskQueue, Task
+except:
+    from .task import TaskQueue, Task
 
 
 ################################################################################
