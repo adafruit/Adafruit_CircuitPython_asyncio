@@ -61,7 +61,7 @@ class Stream:
         """
 
         core._io_queue.queue_read(self.s)
-        await core.sleep(0)
+        yield
         return self.s.read(n)
 
     async def readinto(self, buf):
@@ -73,7 +73,7 @@ class Stream:
         """
 
         core._io_queue.queue_read(self.s)
-        await core.sleep(0)
+        yield
         return self.s.readinto(buf)
 
     async def readexactly(self, n):
@@ -88,7 +88,7 @@ class Stream:
         r = b""
         while n:
             core._io_queue.queue_read(self.s)
-            await core.sleep(0)
+            yield
             r2 = self.s.read(n)
             if r2 is not None:
                 if not len(r2):
@@ -106,7 +106,7 @@ class Stream:
         l = b""
         while True:
             core._io_queue.queue_read(self.s)
-            await core.sleep(0)
+            yield
             l2 = self.s.readline()  # may do multiple reads but won't block
             l += l2
             if not l2 or l[-1] == 10:  # \n (check l in case l2 is str)
@@ -129,7 +129,8 @@ class Stream:
         mv = memoryview(self.out_buf)
         off = 0
         while off < len(mv):
-            yield core._io_queue.queue_write(self.s)
+            core._io_queue.queue_write(self.s)
+            yield
             ret = self.s.write(mv[off:])
             if ret is not None:
                 off += ret
