@@ -148,11 +148,15 @@ class IOQueue:
         del self.map[id(s)]
         self.poller.unregister(s)
 
-    def queue_read(self, s):
+    async def queue_read(self, s):
         self._enqueue(s, 0)
+        _never.state = False
+        await _never
 
-    def queue_write(self, s):
+    async def queue_write(self, s):
         self._enqueue(s, 1)
+        _never.state = False
+        await _never
 
     def remove(self, task):
         while True:
