@@ -60,8 +60,7 @@ class Stream:
         This is a coroutine.
         """
 
-        core._io_queue.queue_read(self.s)
-        await core.sleep(0)
+        await core._io_queue.queue_read(self.s)
         return self.s.read(n)
 
     async def readinto(self, buf):
@@ -72,8 +71,7 @@ class Stream:
         This is a coroutine, and a MicroPython extension.
         """
 
-        core._io_queue.queue_read(self.s)
-        await core.sleep(0)
+        await core._io_queue.queue_read(self.s)
         return self.s.readinto(buf)
 
     async def readexactly(self, n):
@@ -87,8 +85,7 @@ class Stream:
 
         r = b""
         while n:
-            core._io_queue.queue_read(self.s)
-            await core.sleep(0)
+            await core._io_queue.queue_read(self.s)
             r2 = self.s.read(n)
             if r2 is not None:
                 if not len(r2):
@@ -105,8 +102,7 @@ class Stream:
 
         l = b""
         while True:
-            core._io_queue.queue_read(self.s)
-            await core.sleep(0)
+            await core._io_queue.queue_read(self.s)
             l2 = self.s.readline()  # may do multiple reads but won't block
             l += l2
             if not l2 or l[-1] == 10:  # \n (check l in case l2 is str)
@@ -129,7 +125,7 @@ class Stream:
         mv = memoryview(self.out_buf)
         off = 0
         while off < len(mv):
-            yield core._io_queue.queue_write(self.s)
+            await core._io_queue.queue_write(self.s)
             ret = self.s.write(mv[off:])
             if ret is not None:
                 off += ret
@@ -166,8 +162,7 @@ async def open_connection(host, port):
     except OSError as er:
         if er.errno != EINPROGRESS:
             raise er
-    core._io_queue.queue_write(s)
-    await core.sleep(0)
+    await core._io_queue.queue_write(s)
     return ss, ss
 
 
@@ -201,7 +196,7 @@ class Server:
         # Accept incoming connections
         while True:
             try:
-                yield core._io_queue.queue_read(s)
+                await core._io_queue.queue_read(s)
             except core.CancelledError:
                 # Shutdown server
                 s.close()
