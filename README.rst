@@ -73,7 +73,7 @@ Or the following command to update an existing version:
 Documentation
 =============
 
-API documentation for this library can be found on `Read the Docs <https://circuitpython.readthedocs.io/en/latest/docs/library/asyncio.html>`_.
+API documentation for this library can be found on `Read the Docs <https://docs.circuitpython.org/projects/asyncio/en/latest/>`_.
 
 For information on building library documentation, please check out
 `this guide <https://learn.adafruit.com/creating-and-sharing-a-circuitpython-library/sharing-our-docs-on-readthedocs#sphinx-5-1>`_.
