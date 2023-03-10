@@ -1,41 +1,41 @@
-# SPDX-FileCopyrightText: 2019 Damien P. George
-#
-# SPDX-License-Identifier: MIT
-#
-# MicroPython uasyncio module
-# MIT license; Copyright (c) 2019 Damien P. George
-#
-# This code comes from MicroPython, and has not been run through black or pylint there.
-# Altering these files significantly would make merging difficult, so we will not use
-# pylint or black.
-# pylint: skip-file
-# fmt: off
+"""The asyncio package, tracking PEP 3156."""
 
-from .core import *
+# This relies on each of the submodules having an __all__ variable.
+from .base_events import *
+from .coroutines import *
+from .events import *
+from .exceptions import *
+from .futures import *
+from .locks import *
+# from .protocols import *
+from .runners import *
+from .queues import *
+from .circuitpython_streams import *
+# from .subprocess import *
+from .tasks import *
+from .taskgroups import *
+from .timeouts import *
+# from .threads import *
+# from .transports import *
 
-__version__ = "0.0.0+auto.0"
-__repo__ = "https://github.com/Adafruit/Adafruit_CircuitPython_asyncio.git"
+__all__ = (
+    base_events.__all__ +
+    coroutines.__all__ +
+    events.__all__ +
+    exceptions.__all__ +
+    futures.__all__ +
+    locks.__all__ +
+    # protocols.__all__ +
+    runners.__all__ +
+    queues.__all__ +
+    circuitpython_streams.__all__ +
+    # subprocess.__all__ +
+    tasks.__all__ +
+    # threads.__all__ +
+    timeouts.__all__ +
+    # transports.__all__ +
+    ()
+)
 
-_attrs = {
-    "wait_for": "funcs",
-    "wait_for_ms": "funcs",
-    "gather": "funcs",
-    "Event": "event",
-    "ThreadSafeFlag": "event",
-    "Lock": "lock",
-    "open_connection": "stream",
-    "start_server": "stream",
-    "StreamReader": "stream",
-    "StreamWriter": "stream",
-}
-
-# Lazy loader, effectively does:
-#   global attr
-#   from .mod import attr
-def __getattr__(attr):
-    mod = _attrs.get(attr, None)
-    if mod is None:
-        raise AttributeError(attr)
-    value = getattr(__import__(mod, None, None, True, 1), attr)
-    globals()[attr] = value
-    return value
+from .circuitpython_events import *
+__all__ += circuitpython_events.__all__

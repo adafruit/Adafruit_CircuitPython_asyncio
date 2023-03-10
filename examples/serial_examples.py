@@ -37,7 +37,7 @@ if USE_UART:
 
         uart = board.UART()
         uart.timeout = 0
-        s = asyncio.StreamReader(board.UART())
+        s = asyncio.StreamReader(uart)
         while True:
             text = await s.readexactly(4)
             print("UART: ", text)

@@ -24,14 +24,13 @@ Introduction
 Cooperative multitasking and asynchronous I/O
 
 The code in this library is largely based on the
-`MicroPython uasyncio implementation <https://github.com/micropython/micropython/tree/master/extmod/uasyncio>`_.
+`CPython asyncio implementation <https://github.com/python/cpython/tree/3.11/Lib/asyncio>`_.
 
 Dependencies
 =============
 This driver depends on:
 
 * `Adafruit CircuitPython <https://github.com/adafruit/circuitpython>`_
-* `Ticks <https://github.com/adafruit/Adafruit_CircuitPython_Ticks>`_
 
 Please ensure all dependencies are available on the CircuitPython filesystem.
 This is easily achieved by downloading
