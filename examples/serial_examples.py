@@ -22,7 +22,6 @@ if USE_USB:
     import usb_cdc
 
     async def usb_client():
-
         usb_cdc.data.timeout = 0
         s = asyncio.StreamReader(usb_cdc.data)
         while True:
@@ -34,7 +33,6 @@ if USE_UART:
     import board
 
     async def uart_client():
-
         uart = board.UART()
         uart.timeout = 0
         s = asyncio.StreamReader(board.UART())
