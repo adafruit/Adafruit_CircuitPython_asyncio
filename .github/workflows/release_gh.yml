@@ -15,5 +15,6 @@ jobs:
     - name: Run GitHub Release CI workflow
       uses: adafruit/workflows-circuitpython-libs/release-gh@main
       with:
+        package-prefix: "asyncio"
         github-token: ${{ secrets.GITHUB_TOKEN }}
         upload-url: ${{ github.event.release.upload_url }}
