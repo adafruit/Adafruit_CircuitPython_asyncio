@@ -12,3 +12,5 @@ jobs:
     steps:
     - name: Run Build CI workflow
       uses: adafruit/workflows-circuitpython-libs/build@main
+      with:
+        package-prefix: "asyncio"
