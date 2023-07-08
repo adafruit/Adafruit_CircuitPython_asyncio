@@ -395,11 +395,14 @@ def new_event_loop():
     the loop's state, it does not create a new one
     """
 
-    global _task_queue, _io_queue
+    global _task_queue, _io_queue, _exc_context, cur_task
     # TaskQueue of Task instances
     _task_queue = TaskQueue()
     # Task queue and poller for stream IO
     _io_queue = IOQueue()
+    cur_task = None
+    _exc_context['exception'] = None
+    _exc_context['future'] = None
     return Loop
 
 
