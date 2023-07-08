@@ -98,6 +98,7 @@ interval_faster_btn = Button(
     label_color=BUTTON_LABEL_COLOR,
 )
 
+
 # Button state data object. Will hold either true of false whether button is currently pressed
 class ButtonState:
     # pylint: disable=too-few-public-methods
@@ -146,7 +147,6 @@ async def blink(palette, interval, count, button_state):  # Don't forget the asy
     :param ButtonState button_state: The ButtonState data object for the invert color button
     """
     while count < 0 or count > 0:
-
         # if the color button is pressed
         if button_state.state:
             # if the color is still on default
@@ -187,7 +187,6 @@ def handle_color_button(touch_event, color_button, button_state):
 
     # if there is a touch event
     if touch_event:
-
         # if the color button is being touched
         if color_button.contains(touch_event):
             # set selected to change button color

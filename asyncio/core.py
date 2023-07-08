@@ -94,11 +94,11 @@ def sleep(t):
 
 ################################################################################
 # "Never schedule" object"
-# Don't re-schedule the object that awaits the _never singleton.
+# Don't re-schedule the object that awaits _never().
 # For internal use only. Some constructs, like `await event.wait()`,
 # work by NOT re-scheduling the task which calls wait(), but by
 # having some other task schedule it later.
-class _Never:
+class _NeverSingletonGenerator:
     def __init__(self):
         self.state = None
         self.exc = StopIteration()
@@ -117,7 +117,10 @@ class _Never:
            self.exc.__traceback__ = None
            raise self.exc
 
-_never = _Never()
+def _never(sgen=_NeverSingletonGenerator()):
+    # assert sgen.state is None, "Check for a missing `await` in your code"
+    sgen.state = False
+    return sgen
 
 
 ################################################################################
@@ -150,13 +153,11 @@ class IOQueue:
 
     async def queue_read(self, s):
         self._enqueue(s, 0)
-        _never.state = False
-        await _never
+        await _never()
 
     async def queue_write(self, s):
         self._enqueue(s, 1)
-        _never.state = False
-        await _never
+        await _never()
 
     def remove(self, task):
         while True:
