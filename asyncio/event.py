@@ -25,9 +25,7 @@ class Event:
 
     def __init__(self):
         self.state = False  # False=unset; True=set
-        self.waiting = (
-            core.TaskQueue()
-        )  # Queue of Tasks waiting on completion of this event
+        self.waiting = core.TaskQueue()  # Queue of Tasks waiting on completion of this event
 
     def is_set(self):
         """Returns ``True`` if the event is set, ``False`` otherwise."""
@@ -42,7 +40,7 @@ class Event:
         # Note: This must not be called from anything except the thread running
         # the asyncio loop (i.e. neither hard or soft IRQ, or a different thread).
         while self.waiting.peek():
-            core._task_queue.push_head(self.waiting.pop_head())
+            core._task_queue.push(self.waiting.pop())
         self.state = True
 
     def clear(self):
@@ -59,7 +57,7 @@ class Event:
 
         if not self.state:
             # Event not set, put the calling task on the event's waiting queue
-            self.waiting.push_head(core.cur_task)
+            self.waiting.push(core.cur_task)
             # Set calling task's data to the event's queue so it can be removed if needed
             core.cur_task.data = self.waiting
             await core._never()
@@ -89,7 +87,6 @@ try:
             if not self._flag:
                 yield core._io_queue.queue_read(self)
             self._flag = 0
-
 
 except ImportError:
     pass
