@@ -59,7 +59,7 @@ async def wait_for(aw, timeout, sleep=core.sleep):
         # Wait for the timeout to elapse.
         await sleep(timeout)
     except core.CancelledError as er:
-        status = er.value
+        status = er.args[0] if er.args else None
         if status is None:
             # This wait_for was cancelled externally, so cancel aw and re-raise.
             runner_task.cancel()
@@ -92,7 +92,7 @@ class _Remove:
         pass
 
 
-def gather(*aws, return_exceptions=False):
+async def gather(*aws, return_exceptions=False):
     """Run all *aws* awaitables concurrently. Any *aws* that are not tasks
     are promoted to tasks.
 
@@ -134,7 +134,7 @@ def gather(*aws, return_exceptions=False):
     # Wait for the a sub-task to need attention.
     gather_task.data = _Remove
     try:
-        yield
+        await core._never()
     except core.CancelledError as er:
         cancel_all = True
         state = er
