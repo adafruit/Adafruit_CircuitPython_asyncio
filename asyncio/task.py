@@ -130,6 +130,10 @@ class TaskQueue:
     def remove(self, v):
         self.heap = ph_delete(self.heap, v)
 
+    # Compatibility aliases, remove after they are no longer used
+    push_head = push
+    push_sorted = push
+    pop_head = pop
 
 # Task class representing a coroutine, can be waited on and cancelled.
 class Task:

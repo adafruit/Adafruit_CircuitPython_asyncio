@@ -50,8 +50,8 @@ class Lock:
             raise RuntimeError("Lock not acquired")
         if self.waiting.peek():
             # Task(s) waiting on lock, schedule next Task
-            self.state = self.waiting.pop()
-            core._task_queue.push(self.state)
+            self.state = self.waiting.pop_head()
+            core._task_queue.push_head(self.state)
         else:
             # No Task waiting so unlock
             self.state = 0
@@ -65,7 +65,7 @@ class Lock:
 
         if self.state != 0:
             # Lock unavailable, put the calling Task on the waiting queue
-            self.waiting.push(core.cur_task)
+            self.waiting.push_head(core.cur_task)
             # Set calling task's data to the lock's queue so it can be removed if needed
             core.cur_task.data = self.waiting
             try:
