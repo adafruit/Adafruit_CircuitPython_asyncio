@@ -98,6 +98,9 @@ async def gather(*aws, return_exceptions=False):
 
     Returns a list of return values of all *aws*
     """
+    if not aws:
+        return []
+
     def done(t, er):
         # Sub-task "t" has finished, with exception "er".
         nonlocal state

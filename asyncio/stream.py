@@ -113,6 +113,13 @@ class Stream:
         `Stream.drain` is called. It is recommended to call `Stream.drain`
         immediately after calling this function.
         """
+        if not self.out_buf:
+            # Try to write immediately to the underlying stream.
+            ret = self.s.write(buf)
+            if ret == len(buf):
+                return
+            if ret is not None:
+                buf = buf[ret:]
 
         self.out_buf += buf
 
