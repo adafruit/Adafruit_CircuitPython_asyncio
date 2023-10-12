@@ -25,9 +25,7 @@ class Event:
 
     def __init__(self):
         self.state = False  # False=unset; True=set
-        self.waiting = (
-            core.TaskQueue()
-        )  # Queue of Tasks waiting on completion of this event
+        self.waiting = core.TaskQueue()  # Queue of Tasks waiting on completion of this event
 
     def is_set(self):
         """Returns ``True`` if the event is set, ``False`` otherwise."""
@@ -89,7 +87,6 @@ try:
             if not self._flag:
                 yield core._io_queue.queue_read(self)
             self._flag = 0
-
 
 except ImportError:
     pass
