@@ -1,14 +1,16 @@
+"""
+Exceptions and classes related to asyncio Queue implementations.
+"""
+
 from . import event
 
 
 class QueueEmpty(Exception):
     """Raised when Queue.get_nowait() is called on an empty Queue."""
-    pass
 
 
 class QueueFull(Exception):
     """Raised when the Queue.put_nowait() method is called on a full Queue."""
-    pass
 
 
 class Queue:
