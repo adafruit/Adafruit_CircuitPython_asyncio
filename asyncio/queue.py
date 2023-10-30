@@ -76,7 +76,7 @@ class Queue:
     async def put(self, val):
         """
         Put an item into the queue.
-        
+
         If the queue is full, waits until a free
         slot is available before adding item.
         """
