@@ -1,3 +1,9 @@
+# SPDX-FileCopyrightText: 2019-2020 Damien P. George
+#
+# SPDX-License-Identifier: MIT
+#
+# MicroPython uasyncio module
+# MIT license; Copyright (c) 2019-2020 Damien P. George
 """
 Exceptions and classes related to asyncio Queue implementations.
 """
