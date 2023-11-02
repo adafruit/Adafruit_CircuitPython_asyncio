@@ -4,6 +4,11 @@
 #
 # MicroPython uasyncio module
 # MIT license; Copyright (c) 2019-2020 Damien P. George
+
+# The rest of the library assumes that `_never` and `_task_queue` should be imported from
+# core, which angers pylint.
+# pylint: disable=protected-access
+
 """
 Exceptions and classes related to asyncio Queue implementations.
 """
