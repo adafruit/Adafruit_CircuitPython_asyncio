@@ -328,7 +328,7 @@ async def main():  # Don't forget the async!
 
 
 # show main_group so it's visible on the display
-display.show(main_group)
+display.root_group = main_group
 
 # start the main coroutine
 asyncio.run(main())
