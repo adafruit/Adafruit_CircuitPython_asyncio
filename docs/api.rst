@@ -22,6 +22,9 @@
 .. automodule:: asyncio.lock
     :members:
 
+.. automodule:: asyncio.queue
+    :members:
+
 .. automodule:: asyncio.stream
     :members:
     :exclude-members: stream_awrite
