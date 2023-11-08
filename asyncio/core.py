@@ -20,19 +20,13 @@ import sys, select, traceback
 
 # Import TaskQueue and Task, preferring built-in C code over Python code
 try:
-    from _asyncio import TaskQueue, Task
+    from _asyncio import TaskQueue, Task, CancelledError, InvalidStateError
 except:
-    from .task import TaskQueue, Task
+    from .task import TaskQueue, Task, CancelledError, InvalidStateError
 
 
 ################################################################################
 # Exceptions
-
-
-class CancelledError(BaseException):
-    """Injected into a task when calling `Task.cancel()`"""
-
-    pass
 
 
 class TimeoutError(Exception):
