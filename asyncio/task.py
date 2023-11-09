@@ -21,6 +21,18 @@ Tasks
 from . import core
 
 
+class CancelledError(BaseException):
+    """Injected into a task when calling `Task.cancel()`"""
+
+    pass
+
+
+class InvalidStateError(Exception):
+    """Can be raised in situations like setting a result value for a task object that already has a result value set."""
+
+    pass
+
+
 # pairing-heap meld of 2 heaps; O(1)
 def ph_meld(h1, h2):
     if h1 is None:
@@ -188,7 +200,7 @@ class Task:
 
         return not self.state
 
-    def cancel(self):
+    def cancel(self, msg=None):
         """Cancel the task by injecting a ``CancelledError`` into it. The task
         may or may not ignore this exception.
         """
@@ -211,5 +223,85 @@ class Task:
             # On the main running queue but scheduled in the future, so bring it forward to now.
             core._task_queue.remove(self)
             core._task_queue.push(self)
-        self.data = core.CancelledError
+        self.data = CancelledError(msg) if msg else CancelledError()
         return True
+
+    def get_coro(self):
+        return self.coro
+
+    def add_done_callback(self, callback):
+        raise NotImplementedError()
+
+    def remove_done_callback(self, callback):
+        raise NotImplementedError()
+
+    def set_result(self, result):
+        raise RuntimeError('Task does not support set_result operation')
+
+    def result(self):
+        """
+        Return the result of the Task.
+
+        If the Task is done, the result of the wrapped coroutine is returned (or if the coroutine raised an exception, that exception is re-raised.)
+
+        If the Task has been cancelled, this method raises a CancelledError exception.
+
+        If the Task’s result isn’t yet available, this method raises a InvalidStateError exception.
+
+        """
+        if not self.done():
+            raise InvalidStateError()
+
+        exception = self.exception()
+
+        if exception is not None:
+            raise exception
+
+        if not isinstance(self.data, StopIteration):
+            # If this isn't the case then we're in an odd state.
+            return None
+
+        return self.data.value
+
+    def set_exception(self, exception):
+        raise RuntimeError('Task does not support set_exception operation')
+
+    def exception(self):
+        """
+        Return the exception that was set on this Task.
+
+        The exception (or None if no exception was set) is returned only if the Task is done.
+
+        If the Task has been cancelled, this method raises a CancelledError exception.
+
+        If the Task isn’t done yet, this method raises an InvalidStateError exception.
+        """
+        if not self.done():
+            raise InvalidStateError()
+
+        if isinstance(self.data, core.CancelledError):
+            raise self.data
+
+        if isinstance(self.data, StopIteration):
+            # If the data is a stop iteration we can assume this
+            # was a successful run rather than any possible exception
+            return None
+
+        if not isinstance(self.data, BaseException):
+            # If the data is not any type of exception we can treat it as
+            # something else we don't understand but not an exception.
+            return None
+
+        return self.data
+
+    def cancelled(self) -> bool:
+        """
+        Return True if the Task is cancelled.
+
+        The Task is cancelled when the cancellation was requested with cancel() and
+        the wrapped coroutine propagated the CancelledError exception thrown into it.
+        """
+        if not self.done():
+            return False
+
+        return isinstance(self.data, core.CancelledError)
