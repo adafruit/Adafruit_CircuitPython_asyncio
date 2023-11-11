@@ -17,6 +17,7 @@ __version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/Adafruit/Adafruit_CircuitPython_asyncio.git"
 
 _attrs = {
+    "wait": "funcs",
     "wait_for": "funcs",
     "wait_for_ms": "funcs",
     "gather": "funcs",
