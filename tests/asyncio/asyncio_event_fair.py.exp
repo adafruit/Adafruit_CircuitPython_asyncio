@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2019 Damien P. George
+#
+# SPDX-License-Identifier: MIT
+sleep 0
+wait 2
+sleep 1
+wait 3
+sleep 0
+sleep 1
+wait 2
+sleep 0
+sleep 1
+wait 3
+sleep 0
+sleep 1
+wait 2
+wait 3
+wait 2
+wait 3
