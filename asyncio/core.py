@@ -24,15 +24,15 @@ try:
 except:
     from .task import TaskQueue, Task
 
+# Depending on the version of CircuitPython, these errors may exist in the build-in C code
+# even if _asyncio exists
+try:
+    from _asyncio import CancelledError, InvalidStateError
+except:
+    from .task import CancelledError, InvalidStateError
 
 ################################################################################
 # Exceptions
-
-
-class CancelledError(BaseException):
-    """Injected into a task when calling `Task.cancel()`"""
-
-    pass
 
 
 class TimeoutError(Exception):

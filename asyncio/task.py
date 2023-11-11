@@ -21,6 +21,18 @@ Tasks
 from . import core
 
 
+class CancelledError(BaseException):
+    """Injected into a task when calling `Task.cancel()`"""
+
+    pass
+
+
+class InvalidStateError(Exception):
+    """Can be raised in situations like setting a result value for a task object that already has a result value set."""
+
+    pass
+
+
 # pairing-heap meld of 2 heaps; O(1)
 def ph_meld(h1, h2):
     if h1 is None:
