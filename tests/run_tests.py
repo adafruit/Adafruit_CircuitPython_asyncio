@@ -69,9 +69,7 @@ def run_testcase(suite: str, testcase: str):
     with open("{0}.out".format(qtest), "w") as actual_output_file:
         actual_output_file.write(LICENSE_PREFIX)
 
-    result = os.system(
-        "{0} {1} 2>> {1}.out >> {1}.out".format(get_interpreter(), qtest)
-    )
+    result = os.system("{0} {1} >> {1}.out 2>&1".format(get_interpreter(), qtest))
 
     with open("%s.out" % qtest) as actual_output_file:
         actual_output = actual_output_file.read()
