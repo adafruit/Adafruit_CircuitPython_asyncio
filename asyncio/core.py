@@ -16,7 +16,12 @@ Core
 """
 
 from adafruit_ticks import ticks_ms as ticks, ticks_diff, ticks_add
-import sys, select, traceback
+import sys, select
+
+try:
+    from traceback import print_exception
+except:
+    from .traceback import print_exception
 
 # Import TaskQueue and Task, preferring built-in C code over Python code
 try:
@@ -371,7 +376,7 @@ class Loop:
         """The default exception handler that is called."""
 
         exc = context["exception"]
-        traceback.print_exception(None, exc, exc.__traceback__)
+        print_exception(None, exc, exc.__traceback__)
 
     def call_exception_handler(context):
         """Call the current exception handler. The argument *context* is passed through
