@@ -26,7 +26,7 @@ except ImportError:
 
 # Depending on the release of CircuitPython these errors may or may not
 # exist in the C implementation of `_asyncio`.  However, when they
-# do exist, must be preferred over the Python code.
+# do exist, they must be preferred over the Python code.
 try:
     from _asyncio import CancelledError, InvalidStateError
 except (ImportError, AttributeError):
