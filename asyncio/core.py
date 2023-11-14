@@ -24,16 +24,24 @@ try:
 except ImportError:
     from .task import TaskQueue, Task
 
+################################################################################
+# Exceptions
+
+
 # Depending on the release of CircuitPython these errors may or may not
 # exist in the C implementation of `_asyncio`.  However, when they
 # do exist, they must be preferred over the Python code.
 try:
     from _asyncio import CancelledError, InvalidStateError
 except (ImportError, AttributeError):
-    from .task import CancelledError, InvalidStateError
+    class CancelledError(BaseException):
+        """Injected into a task when calling `Task.cancel()`"""
+        pass
 
-################################################################################
-# Exceptions
+
+    class InvalidStateError(Exception):
+        """Can be raised in situations like setting a result value for a task object that already has a result value set."""
+        pass
 
 
 class TimeoutError(Exception):
