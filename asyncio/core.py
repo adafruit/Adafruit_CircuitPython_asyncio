@@ -21,14 +21,15 @@ import sys, select, traceback
 # Import TaskQueue and Task, preferring built-in C code over Python code
 try:
     from _asyncio import TaskQueue, Task
-except:
+except ImportError:
     from .task import TaskQueue, Task
 
-# Depending on the version of CircuitPython, these errors may exist in the build-in C code
-# even if _asyncio exists
+# Depending on the release of CircuitPython these errors may or may not
+# exist in the C implementation of `_asyncio`.  However, when they
+# do exist, must be preferred over the Python code.
 try:
     from _asyncio import CancelledError, InvalidStateError
-except:
+except (ImportError, AttributeError):
     from .task import CancelledError, InvalidStateError
 
 ################################################################################
