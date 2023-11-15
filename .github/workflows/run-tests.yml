@@ -4,11 +4,18 @@
 
 name: Run tests
 
-on: [pull_request, push]
+on:
+  workflow_call:
+    inputs:
+      cp-version:
+        required: true
+        type: string
 
 jobs:
   run:
     runs-on: ubuntu-22.04
+    env:
+      CP_VERSION: ${{ inputs.cp-version }}
     steps:
     - name: Set up repository
       uses: actions/checkout@v3
@@ -18,6 +25,7 @@ jobs:
     - name: Set up circuitpython repository
       uses: actions/checkout@v3
       with:
+        ref: ${{ inputs.cp-version }}
         repository: adafruit/circuitpython
         path: ./circuitpython/
         submodules: false
@@ -32,12 +40,19 @@ jobs:
       run: python tools/ci_fetch_deps.py tests
       shell: bash
       working-directory: ./circuitpython/
+    - name: Fetch relevant submodules
+      id: submodules
+      run: python tools/ci_fetch_deps.py tests
+      working-directory: ./circuitpython
     - name: Install python dependencies
       run: pip install -r requirements-dev.txt
       shell: bash
       working-directory: ./circuitpython/
+    - name: Build mpy-cross
+      run: make -C mpy-cross -j2
+      working-directory: ./circuitpython/
     - name: Build unix port
-      run: make -C ports/unix VARIANT=coverage -j2
+      run: make -C ports/unix VARIANT=coverage BUILD=build-coverage PROG=micropython -j2
       working-directory: ./circuitpython/
     - name: Run tests
       run: ./run_tests.py
