@@ -21,18 +21,27 @@ import sys, select, traceback
 # Import TaskQueue and Task, preferring built-in C code over Python code
 try:
     from _asyncio import TaskQueue, Task
-except:
+except ImportError:
     from .task import TaskQueue, Task
-
 
 ################################################################################
 # Exceptions
 
 
-class CancelledError(BaseException):
-    """Injected into a task when calling `Task.cancel()`"""
+# Depending on the release of CircuitPython these errors may or may not
+# exist in the C implementation of `_asyncio`.  However, when they
+# do exist, they must be preferred over the Python code.
+try:
+    from _asyncio import CancelledError, InvalidStateError
+except (ImportError, AttributeError):
+    class CancelledError(BaseException):
+        """Injected into a task when calling `Task.cancel()`"""
+        pass
 
-    pass
+
+    class InvalidStateError(Exception):
+        """Can be raised in situations like setting a result value for a task object that already has a result value set."""
+        pass
 
 
 class TimeoutError(Exception):
