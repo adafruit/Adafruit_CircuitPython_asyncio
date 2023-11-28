@@ -14,11 +14,11 @@ from adafruit_ticks import ticks_ms, ticks_add, ticks_less, ticks_diff
 
 async def function_1():
     print('Execturing function_1')
-    await asyncio.core.sleep(0)
+    await asyncio.sleep(0)
     
 async def function_2(led):
     print('Execturing function_2')
-    await asyncio.core.sleep(0)
+    await asyncio.sleep(0)
 
 async def main():
 
@@ -34,12 +34,12 @@ async def main():
       
         if ticks_diff(ticks_ms(), start_function_1 ) > delay_1:
             start_function_1 = ticks_ms()
-            asyncio.core.create_task(function_1())
+            asyncio.create_task(function_1())
             
         if ticks_diff(ticks_ms(), start_function_2) > delay_2:
             start_function_2 = ticks_ms()
-            asyncio.core.create_task(function_2())
+            asyncio.create_task(function_2())
         
-        await asyncio.core.sleep(0)
+        await asyncio.sleep(0)
         
-asyncio.core.run(main(led)) 
+asyncio.run(main(led)) 
