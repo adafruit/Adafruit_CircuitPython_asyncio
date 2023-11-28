@@ -10,13 +10,13 @@ user-defined time intervals.
 
 # Imports
 import asyncio
-from adafruit_ticks import ticks_ms, ticks_add, ticks_less, ticks_diff
+from adafruit_ticks import ticks_ms, ticks_diff
 
 async def function_1():
     print('Execturing function_1')
     await asyncio.sleep(0)
     
-async def function_2(led):
+async def function_2():
     print('Execturing function_2')
     await asyncio.sleep(0)
 
@@ -42,4 +42,4 @@ async def main():
         
         await asyncio.sleep(0)
         
-asyncio.run(main(led)) 
+asyncio.run(main()) 
