@@ -6,13 +6,13 @@
 # several copies of the functions 'blink', 'input_poll', or 'state'
 # should be straightforward with changes to names and objects.
 
+import asyncio
 import board
-import time
 import adafruit_ticks
 import digitalio
 from adafruit_debouncer import Debouncer
 import neopixel
-import asyncio
+
 
 # Import library modules, as is tradition
 
@@ -34,7 +34,7 @@ COLORS = {0: BLANK, 1: RED, 2: GREEN, 3: BLUE}
 # Define the various colors according to preference and set them into
 # a dictionary for later retrieval. (Blue is not used in this code.)
 
-class color:
+class Color:
     def __init__(self, initial_value):
         self.value = initial_value
 
@@ -86,7 +86,7 @@ async def state(swapper, color):
 
 async def main():
 
-    color.value = 1
+    color = Color(1)
     COLORS.get(color)
 
 # Sets the color the led will first show on start
