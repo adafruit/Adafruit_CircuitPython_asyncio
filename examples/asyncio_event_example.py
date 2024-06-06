@@ -8,8 +8,6 @@
 
 import asyncio
 import board
-# pylint: disable=unused-import
-import adafruit_ticks
 import digitalio
 from adafruit_debouncer import Debouncer
 import neopixel
