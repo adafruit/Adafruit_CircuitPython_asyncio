@@ -8,6 +8,7 @@
 
 import asyncio
 import board
+# pylint: disable=unused-import
 import adafruit_ticks
 import digitalio
 from adafruit_debouncer import Debouncer
@@ -17,8 +18,8 @@ import neopixel
 # Import library modules, as is tradition
 
 pin = digitalio.DigitalInOut(board.BUTTON)
-pin.direction = digitalio.Direction.INPUT
-pin.pull = digitalio.Pull.UP
+pin.direction = Direction.INPUT
+pin.pull = Pull.UP
 button = Debouncer(pin)
 
 # Instantiate the input, in this case, the 'BOOT' button on a
@@ -35,6 +36,7 @@ COLORS = {0: BLANK, 1: RED, 2: GREEN, 3: BLUE}
 # a dictionary for later retrieval. (Blue is not used in this code.)
 
 class Color:
+    # pylint: disable=too-few-public-methods
     def __init__(self, initial_value):
         self.value = initial_value
 
