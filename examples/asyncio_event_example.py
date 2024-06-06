@@ -16,8 +16,8 @@ import neopixel
 # Import library modules, as is tradition
 
 pin = digitalio.DigitalInOut(board.BUTTON)
-pin.direction = Direction.INPUT
-pin.pull = Pull.UP
+pin.direction = digitalio.Direction.INPUT
+pin.pull = digitalio.Pull.UP
 button = Debouncer(pin)
 
 # Instantiate the input, in this case, the 'BOOT' button on a
