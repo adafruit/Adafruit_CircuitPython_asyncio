@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 J Fletcher 
+# SPDX-FileCopyrightText: 2024 J Fletcher
 #
 # SPDX-License-Identifier: MIT
 
