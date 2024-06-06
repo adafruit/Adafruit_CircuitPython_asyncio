@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-### Example for one led:
+# -----[Example for one led]-----------------------------
 
 import asyncio
 import board
@@ -28,14 +28,13 @@ async def main():  # Don't forget the async!
 asyncio.run(main())
 
 
-### Example for two leds:
+# -----[Example for two leds]-------------------------------
 
-import asyncio
-import board
-import digitalio
+# Import modules as above
 
 
 async def blink(pin, interval, count):
+    # pylint: disable=function-redefined
     with digitalio.DigitalInOut(pin) as led:
         led.switch_to_output(value=False)
         for _ in range(count):
@@ -46,6 +45,7 @@ async def blink(pin, interval, count):
 
 
 async def main():
+    # pylint: disable=function-redefined
     led1_task = asyncio.create_task(blink(board.D1, 0.25, 10))
     led2_task = asyncio.create_task(blink(board.D2, 0.1, 20))
 
