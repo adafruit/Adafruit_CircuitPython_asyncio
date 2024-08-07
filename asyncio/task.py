@@ -1,3 +1,4 @@
+# CIRCUITPY-CHANGE: SPDX
 # SPDX-FileCopyrightText: 2019-2020 Damien P. George
 #
 # SPDX-License-Identifier: MIT
@@ -5,15 +6,12 @@
 # MicroPython uasyncio module
 # MIT license; Copyright (c) 2019-2020 Damien P. George
 #
+# CIRCUITPY-CHANGE
 # This code comes from MicroPython, and has not been run through black or pylint there.
 # Altering these files significantly would make merging difficult, so we will not use
 # pylint or black.
 # pylint: skip-file
 # fmt: off
-"""
-Tasks
-=====
-"""
 
 # This file contains the core TaskQueue based on a pairing heap, and the core Task class.
 # They can optionally be replaced by C implementations.
@@ -130,13 +128,14 @@ class TaskQueue:
     def remove(self, v):
         self.heap = ph_delete(self.heap, v)
 
-    # Compatibility aliases, remove after they are no longer used
+    # CIRCUITPY-CHANGE: Compatibility aliases, remove after 8.x is no longer supported
     push_head = push
     push_sorted = push
     pop_head = pop
 
 # Task class representing a coroutine, can be waited on and cancelled.
 class Task:
+    # CIRCUITPY-CHANGE: doc
     """This object wraps a coroutine into a running task. Tasks can be waited on
     using ``await task``, which will wait for the task to complete and return the
     return value of the task.
@@ -166,11 +165,12 @@ class Task:
             raise RuntimeError("can't wait")
         return self
 
-    # CircuitPython needs __await()__.
+    # CICUITPY-CHANGE: CircuitPython needs __await()__.
     __await__ = __iter__
 
     def __next__(self):
         if not self.state:
+            # CIRCUITPY-CHANGE
             if self.data is None:
                 # Task finished but has already been sent to the loop's exception handler.
                 raise StopIteration
@@ -184,11 +184,13 @@ class Task:
             core.cur_task.data = self
 
     def done(self):
+        # CIRCUITPY-CHANGE: doc
         """Whether the task is complete."""
 
         return not self.state
 
     def cancel(self):
+        # CIRCUITPY-CHANGE: doc
         """Cancel the task by injecting a ``CancelledError`` into it. The task
         may or may not ignore this exception.
         """

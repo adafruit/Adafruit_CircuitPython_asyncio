@@ -1,12 +1,9 @@
-# SPDX-FileCopyrightText: 2019-2020 Damien P. George
+# SPDX-FileCopyrightText: 2024 by Adafruit Industries
 #
 # SPDX-License-Identifier: MIT
 #
-# MicroPython uasyncio module
-# MIT license; Copyright (c) 2019-2020 Damien P. George
-"""
-Fallback traceback module if the system traceback is missing.
-"""
+
+# Note: not present in MicroPython asyncio
 
 try:
     from typing import List
