@@ -446,6 +446,19 @@ def get_event_loop(runq_len=0, waitq_len=0):
 
     return Loop
 
+# CIRCUITPY-CHANGE: added, to match CPython
+def get_running_loop():
+    """Return the event loop used to schedule and run tasks. See `Loop`."""
+
+    return Loop
+
+
+def get_event_loop(runq_len=0, waitq_len=0):
+    # CIRCUITPY-CHANGE: doc
+    """Return the event loop used to schedule and run tasks. See `Loop`. Deprecated and will be removed later."""
+
+    # CIRCUITPY-CHANGE
+    return get_running_loop()
 
 def current_task():
     # CIRCUITPY-CHANGE: doc

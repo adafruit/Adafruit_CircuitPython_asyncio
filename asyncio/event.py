@@ -72,32 +72,4 @@ class Event:
         return True
 
 
-# MicroPython-extension: This can be set from outside the asyncio event loop,
-# such as other threads, IRQs or scheduler context. Implementation is a stream
-# that asyncio will poll until a flag is set.
-# Note: Unlike Event, this is self-clearing after a wait().
-try:
-    import io
-
-    class ThreadSafeFlag(io.IOBase):
-        def __init__(self):
-            self.state = 0
-
-        def ioctl(self, req, flags):
-            if req == 3:  # MP_STREAM_POLL
-                return self.state * flags
-            return -1  # Other requests are unsupported
-
-        def set(self):
-            self.state = 1
-
-        def clear(self):
-            self.state = 0
-
-        async def wait(self):
-            if not self.state:
-                yield core._io_queue.queue_read(self)
-            self.state = 0
-
-except ImportError:
-    pass
+# CIRCUITPY: remove ThreadSafeFlag
