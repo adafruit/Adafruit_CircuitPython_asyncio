@@ -72,4 +72,4 @@ class Event:
         return True
 
 
-# CIRCUITPY: remove ThreadSafeFlag
+# CIRCUITPY: remove ThreadSafeFlag; non-standard extension.

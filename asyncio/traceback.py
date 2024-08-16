@@ -5,6 +5,8 @@
 
 # Note: not present in MicroPython asyncio
 
+"""CircuitPython-specific traceback support for asyncio."""
+
 try:
     from typing import List
 except ImportError:

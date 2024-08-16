@@ -92,8 +92,7 @@ class _Remove:
         pass
 
 
-# CIRCUITPY-CHANGE: async
-async def gather(*aws, return_exceptions=False):
+def gather(*aws, return_exceptions=False):
     # CIRCUITPY-CHANGE: doc
     """Run all *aws* awaitables concurrently. Any *aws* that are not tasks
     are promoted to tasks.
