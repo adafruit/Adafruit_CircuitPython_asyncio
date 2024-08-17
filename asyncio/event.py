@@ -57,8 +57,6 @@ class Event:
         # CIRCUITPY-CHANGE: doc
         """Wait for the event to be set. If the event is already set then it returns
         immediately.
-
-        This is a coroutine.
         """
 
         if not self.state:

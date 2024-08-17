@@ -67,8 +67,6 @@ class Lock:
         # CIRCUITPY-CHANGE: doc
         """Wait for the lock to be in the unlocked state and then lock it in an
         atomic way. Only one task can acquire the lock at any one time.
-
-        This is a coroutine.
         """
 
         if self.state != 0:

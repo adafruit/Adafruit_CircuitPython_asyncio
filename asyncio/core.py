@@ -96,7 +96,9 @@ def sleep_ms(t, sgen=SingletonGenerator()):
     # CIRCUITPY-CHANGE: doc
     """Sleep for *t* milliseconds.
 
-    This is a coroutine, and a MicroPython extension.
+    This is a MicroPython extension.
+
+    Returns a coroutine.
     """
 
     # CIRCUITPY-CHANGE: add debugging hint
@@ -108,9 +110,9 @@ def sleep_ms(t, sgen=SingletonGenerator()):
 # Pause task execution for the given time (in seconds)
 def sleep(t):
     # CIRCUITPY-CHANGE: doc
-    """Sleep for *t* seconds
+    """Sleep for *t* seconds.
 
-    This is a coroutine.
+    Returns a coroutine.
     """
 
     return sleep_ms(int(t * 1000))

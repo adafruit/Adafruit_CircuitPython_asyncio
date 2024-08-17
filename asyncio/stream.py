@@ -43,8 +43,6 @@ class Stream:
     async def wait_closed(self):
         # CIRCUITPY-CHANGE: doc
         """Wait for the stream to close.
-
-        This is a coroutine.
         """
 
         # TODO yield?
@@ -54,8 +52,6 @@ class Stream:
     async def read(self, n):
         # CIRCUITPY-CHANGE: doc
         """Read up to *n* bytes and return them.
-
-        This is a coroutine.
         """
 
         await core._io_queue.queue_read(self.s)
@@ -67,7 +63,7 @@ class Stream:
 
         Return the number of bytes read into *buf*
 
-        This is a coroutine, and a MicroPython extension.
+        This is a MicroPython extension.
         """
 
         # CIRCUITPY-CHANGE: await, not yield
@@ -81,9 +77,7 @@ class Stream:
 
         Raises an ``EOFError`` exception if the stream ends before reading
         *n* bytes.
-
-        This is a coroutine.
-        """
+       """
 
         r = b""
         while n:
@@ -101,8 +95,6 @@ class Stream:
     async def readline(self):
         # CIRCUITPY-CHANGE: doc
         """Read a line and return it.
-
-        This is a coroutine.
         """
 
         l = b""
@@ -133,8 +125,6 @@ class Stream:
     async def drain(self):
         # CIRCUITPY-CHANGE: doc
         """Drain (write) all buffered output data out to the stream.
-
-        This is a coroutine.
         """
 
         mv = memoryview(self.out_buf)
@@ -162,8 +152,6 @@ async def open_connection(host, port, ssl=None, server_hostname=None):
 
     Returns a pair of streams: a reader and a writer stream. Will raise a socket-specific
     ``OSError`` if the host could not be resolved or if the connection could not be made.
-
-    This is a coroutine.
     """
 
     from uerrno import EINPROGRESS
@@ -188,7 +176,7 @@ async def open_connection(host, port, ssl=None, server_hostname=None):
         s = ssl.wrap_socket(s, server_hostname=server_hostname, do_handshake_on_connect=False)
         s.setblocking(False)
     ss = Stream(s)
-    yield core._io_queue.queue_write(s)
+    await core._io_queue.queue_write(s)
     return ss, ss
 
 
@@ -214,8 +202,6 @@ class Server:
 
     async def wait_closed(self):
         """Wait for the server to close.
-
-        This is a coroutine.
         """
 
         await self.task
@@ -263,8 +249,6 @@ async def start_server(cb, host, port, backlog=5):
     writer streams for the connection.
 
     Returns a `Server` object.
-
-    This is a coroutine.
     """
 
     import socket

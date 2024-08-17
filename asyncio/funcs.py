@@ -42,8 +42,6 @@ async def wait_for(aw, timeout, sleep=core.sleep):
     this should be trapped by the caller.
 
     Returns the return value of *aw*.
-
-    This is a coroutine.
     """
 
     aw = core._promote_to_task(aw)
@@ -80,7 +78,9 @@ def wait_for_ms(aw, timeout):
     # CIRCUITPY-CHANGE: doc
     """Similar to `wait_for` but *timeout* is an integer in milliseconds.
 
-    This is a coroutine, and a MicroPython extension.
+    This is a MicroPython extension.
+
+    Returns a coroutine.
     """
 
     return wait_for(aw, timeout, core.sleep_ms)
