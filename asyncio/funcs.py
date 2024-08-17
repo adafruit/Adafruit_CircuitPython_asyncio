@@ -92,7 +92,8 @@ class _Remove:
         pass
 
 
-def gather(*aws, return_exceptions=False):
+# CIRCUITPY-CHANGE: async
+async def gather(*aws, return_exceptions=False):
     # CIRCUITPY-CHANGE: doc
     """Run all *aws* awaitables concurrently. Any *aws* that are not tasks
     are promoted to tasks.
@@ -153,7 +154,7 @@ def gather(*aws, return_exceptions=False):
     if state > 0:
         gather_task.data = _Remove
         try:
-            yield
+            await core._never()
         except core.CancelledError as er:
             cancel_all = True
             state = er
