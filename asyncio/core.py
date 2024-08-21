@@ -428,7 +428,7 @@ class Loop:
         # CIRCUITPY-CHANGE: doc
         """The default exception handler that is called."""
 
-        # CIRCUITPY_CHANGE: use CircuitPython traceback printing
+        # CIRCUITPY-CHANGE: use CircuitPython traceback printing
         exc = context["exception"]
         print_exception(None, exc, exc.__traceback__)
 
