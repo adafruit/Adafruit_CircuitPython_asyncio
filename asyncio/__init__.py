@@ -23,6 +23,7 @@ _attrs = {
     "Event": "event",
     "ThreadSafeFlag": "event",
     "Lock": "lock",
+    "Queue": "queue",
     "open_connection": "stream",
     "start_server": "stream",
     "StreamReader": "stream",
