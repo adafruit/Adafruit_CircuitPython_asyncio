@@ -1,10 +1,12 @@
+# CIRCUITPY-CHANGE: SPDX
 # SPDX-FileCopyrightText: 2019-2020 Damien P. George
 #
 # SPDX-License-Identifier: MIT
 #
 # MicroPython uasyncio module
 # MIT license; Copyright (c) 2019-2020 Damien P. George
-#
+
+# CICUITPY-CHANGE
 # This code comes from MicroPython, and has not been run through black or pylint there.
 # Altering these files significantly would make merging difficult, so we will not use
 # pylint or black.
@@ -19,6 +21,7 @@ from . import core
 
 # Lock class for primitive mutex capability
 class Lock:
+    # CIRCUITPY-CHANGE: doc
     """Create a new lock which can be used to coordinate tasks. Locks start in
     the unlocked state.
 
@@ -36,11 +39,13 @@ class Lock:
         self.waiting = core.TaskQueue()
 
     def locked(self):
+        # CIRCUITPY-CHANGE: doc
         """Returns ``True`` if the lock is locked, otherwise ``False``."""
 
         return self.state == 1
 
     def release(self):
+        # CIRCUITPY-CHANGE: doc
         """Release the lock. If any tasks are waiting on the lock then the next
         one in the queue is scheduled to run and the lock remains locked. Otherwise,
         no tasks are waiting and the lock becomes unlocked.
@@ -50,25 +55,28 @@ class Lock:
             raise RuntimeError("Lock not acquired")
         if self.waiting.peek():
             # Task(s) waiting on lock, schedule next Task
+             # CIRCUITPY-CHANGE: when 8.x support is discontinued, change to .pop() and .push()
             self.state = self.waiting.pop_head()
             core._task_queue.push_head(self.state)
         else:
             # No Task waiting so unlock
             self.state = 0
 
+    # CIRCUITPY-CHANGE: async, since we don't use yield
     async def acquire(self):
+        # CIRCUITPY-CHANGE: doc
         """Wait for the lock to be in the unlocked state and then lock it in an
         atomic way. Only one task can acquire the lock at any one time.
-
-        This is a coroutine.
         """
 
         if self.state != 0:
             # Lock unavailable, put the calling Task on the waiting queue
+             # CIRCUITPY-CHANGE: when 8.x support is discontinued, change to .push()
             self.waiting.push_head(core.cur_task)
             # Set calling task's data to the lock's queue so it can be removed if needed
             core.cur_task.data = self.waiting
             try:
+                # CIRCUITPY-CHANGE await without rescheduling
                 await core._never()
             except core.CancelledError as er:
                 if self.state == core.cur_task:

@@ -1,10 +1,12 @@
-# SPDX-FileCopyrightText: 2019 Damien P. George
+# CIRCUITPY-CHANGE: SPDX
+# SPDX-FileCopyrightText: 2019-2020 Damien P. George
 #
 # SPDX-License-Identifier: MIT
-#
-# MicroPython uasyncio module
+
+# MicroPython asyncio module
 # MIT license; Copyright (c) 2019 Damien P. George
 #
+# CIRCUITPY-CHANGE
 # This code comes from MicroPython, and has not been run through black or pylint there.
 # Altering these files significantly would make merging difficult, so we will not use
 # pylint or black.
@@ -13,6 +15,7 @@
 
 from .core import *
 
+# CIRCUITPY-CHANGE: use CircuitPython version
 __version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/Adafruit/Adafruit_CircuitPython_asyncio.git"
 
@@ -28,6 +31,7 @@ _attrs = {
     "StreamReader": "stream",
     "StreamWriter": "stream",
 }
+
 
 # Lazy loader, effectively does:
 #   global attr
