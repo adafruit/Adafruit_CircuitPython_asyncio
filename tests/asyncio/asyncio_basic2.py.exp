@@ -1,0 +1,7 @@
+# SPDX-FileCopyrightText: 2019 Damien P. George
+#
+# SPDX-License-Identifier: MIT
+main start
+forever start
+main done
+42
