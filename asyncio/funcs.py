@@ -122,8 +122,7 @@ async def gather(*aws, return_exceptions=False):
                 # Still some sub-tasks running.
                 return
         # Gather waiting is done, schedule the main gather task.
-        # CIRCUITPY-CHANGE: when 8.x support is discontinued, change to .push()
-        core._task_queue.push_head(gather_task)
+        core._task_queue.push(gather_task)
 
     # Prepare the sub-tasks for the gather.
     # The `state` variable counts the number of tasks to wait for, and can be negative
