@@ -8,11 +8,12 @@ the interval length of the blink for one of the circles.
 """
 
 import asyncio
+
 import adafruit_touchscreen
+import board
 import displayio
 import terminalio
 import vectorio
-import board
 from adafruit_button import Button
 
 # use built-in display
@@ -101,14 +102,12 @@ interval_faster_btn = Button(
 
 # Button state data object. Will hold either true of false whether button is currently pressed
 class ButtonState:
-    # pylint: disable=too-few-public-methods
     def __init__(self, initial_state):
         self.state = initial_state
 
 
 # Interval length data object. Holds the amount of time in ms the interval should last for
 class Interval:
-    # pylint: disable=too-few-public-methods
     def __init__(self, initial_value):
         self.value = initial_value
 
@@ -202,13 +201,11 @@ def handle_color_button(touch_event, color_button, button_state):
             button_state.state = False
 
     # there are no touch events
-    else:
-        # if the color button is currently the pressed color
-        if color_button.selected:
-            # set selected back to false to change button back to default color
-            color_button.selected = False
-            # set button_state so other coroutines can access it
-            button_state.state = False
+    elif color_button.selected:
+        # set selected back to false to change button back to default color
+        color_button.selected = False
+        # set button_state so other coroutines can access it
+        button_state.state = False
 
 
 def handle_interval_buttons(touch_event, button_slower, button_faster, interval):
@@ -233,7 +230,7 @@ def handle_interval_buttons(touch_event, button_slower, button_faster, interval)
 
                 # increment the interval length and store it on the data object
                 interval.value += 100
-                print("new interval val: {}".format(interval.value))
+                print(f"new interval val: {interval.value}")
 
         # if the slower button is not being touched
         else:
@@ -250,7 +247,7 @@ def handle_interval_buttons(touch_event, button_slower, button_faster, interval)
                 if interval.value >= 100:
                     # decrement interval value and store it on the data object
                     interval.value -= 100
-                print("new interval val: {}".format(interval.value))
+                print(f"new interval val: {interval.value}")
 
         # if the faster button is not being touched
         else:
@@ -270,9 +267,7 @@ def handle_interval_buttons(touch_event, button_slower, button_faster, interval)
             button_faster.selected = False
 
 
-async def monitor_buttons(
-    button_slower, button_faster, color_button, interval, button_state
-):
+async def monitor_buttons(button_slower, button_faster, color_button, interval, button_state):
     """
     monitor_buttons coroutine.
 
@@ -303,12 +298,8 @@ async def main():  # Don't forget the async!
     interval_2 = Interval(350)
 
     # create circle blink tasks
-    circle_1_task = asyncio.create_task(
-        blink(palette_1, interval_1, -1, color_btn_state)
-    )
-    circle_2_task = asyncio.create_task(
-        blink(palette_2, interval_2, 20, color_btn_state)
-    )
+    circle_1_task = asyncio.create_task(blink(palette_1, interval_1, -1, color_btn_state))
+    circle_2_task = asyncio.create_task(blink(palette_2, interval_2, 20, color_btn_state))
 
     # create buttons task
     button_task = asyncio.create_task(
@@ -322,9 +313,7 @@ async def main():  # Don't forget the async!
     )
 
     # start all of the tasks
-    await asyncio.gather(
-        circle_1_task, circle_2_task, button_task
-    )  # Don't forget the await!
+    await asyncio.gather(circle_1_task, circle_2_task, button_task)  # Don't forget the await!
 
 
 # show main_group so it's visible on the display

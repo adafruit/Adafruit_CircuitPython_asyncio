@@ -11,11 +11,11 @@
 # should be straightforward with changes to names and objects.
 
 import asyncio
+
 import board
 import digitalio
-from adafruit_debouncer import Debouncer
 import neopixel
-
+from adafruit_debouncer import Debouncer
 
 # Import library modules, as is tradition
 
@@ -39,7 +39,6 @@ COLORS = {0: BLANK, 1: RED, 2: GREEN, 3: BLUE}
 
 
 class Color:
-    # pylint: disable=too-few-public-methods
     def __init__(self, initial_value):
         self.value = initial_value
 

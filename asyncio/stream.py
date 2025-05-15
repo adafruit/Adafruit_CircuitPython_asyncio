@@ -154,8 +154,9 @@ async def open_connection(host, port, ssl=None, server_hostname=None):
     ``OSError`` if the host could not be resolved or if the connection could not be made.
     """
 
-    from uerrno import EINPROGRESS
     import socket
+
+    from uerrno import EINPROGRESS
 
     ai = socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM)[0]  # TODO this is blocking!
     s = socket.socket(ai[0], ai[1], ai[2])
