@@ -5,6 +5,7 @@
 # -----[Example for one led]-----------------------------
 
 import asyncio
+
 import board
 import digitalio
 
@@ -34,7 +35,6 @@ asyncio.run(main())
 
 
 async def blink(pin, interval, count):
-    # pylint: disable=function-redefined
     with digitalio.DigitalInOut(pin) as led:
         led.switch_to_output(value=False)
         for _ in range(count):
@@ -45,7 +45,6 @@ async def blink(pin, interval, count):
 
 
 async def main():
-    # pylint: disable=function-redefined
     led1_task = asyncio.create_task(blink(board.D1, 0.25, 10))
     led2_task = asyncio.create_task(blink(board.D2, 0.1, 20))
 

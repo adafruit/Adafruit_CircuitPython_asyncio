@@ -27,7 +27,7 @@ def _print_traceback(traceback, limit=None, file=sys.stderr) -> List[str]:
         frame_code = frame.f_code
         filename = frame_code.co_filename
         name = frame_code.co_name
-        print('  File "%s", line %d, in %s' % (filename, line_number, name), file=file)
+        print(f'  File "{filename}", line {line_number}, in {name}', file=file)
         traceback = traceback.tb_next
         n = n + 1
         if limit is not None and n >= limit:
@@ -53,4 +53,4 @@ def print_exception(exception, value=None, traceback=None, limit=None, file=sys.
     if value is None or not valuestr:
         print(exception_type, file=file)
     else:
-        print("%s: %s" % (str(exception_type), valuestr), file=file)
+        print(f"{str(exception_type)}: {valuestr}", file=file)

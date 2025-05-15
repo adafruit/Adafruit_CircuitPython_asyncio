@@ -10,7 +10,6 @@ Meanwhile a simple counter counts up every second and also prints
 to the console.
 """
 
-
 import asyncio
 
 USE_USB = True
@@ -51,7 +50,7 @@ if USE_BLE:
         uart = UARTService()
         advertisement = ProvideServicesAdvertisement(uart)
         ble.start_advertising(advertisement)
-        s = asyncio.StreamReader(uart._rx)  # pylint: disable=protected-access
+        s = asyncio.StreamReader(uart._rx)
         while True:
             text = await s.read(6)
             print("BLE: ", text)

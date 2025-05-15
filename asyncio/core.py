@@ -14,8 +14,11 @@
 # fmt: off
 
 # CIRCUITPY-CHANGE: use our ticks library
-from adafruit_ticks import ticks_ms as ticks, ticks_diff, ticks_add
-import sys, select
+import select
+import sys
+
+from adafruit_ticks import ticks_add, ticks_diff
+from adafruit_ticks import ticks_ms as ticks
 
 # CIRCUITPY-CHANGE: CircuitPython traceback support
 try:
@@ -25,10 +28,10 @@ except:
 
 # Import TaskQueue and Task, preferring built-in C code over Python code
 try:
-    from _asyncio import TaskQueue, Task
+    from _asyncio import Task, TaskQueue
 # CIRCUITPY-CHANGE: more specific error checking
 except ImportError:
-    from .task import TaskQueue, Task
+    from .task import Task, TaskQueue
 
 ################################################################################
 # Exceptions

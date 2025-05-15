@@ -168,14 +168,12 @@ async def gather(*aws, return_exceptions=False):
         elif isinstance(ts[i].data, StopIteration):
             # Sub-task ran to completion, get its return value.
             ts[i] = ts[i].data.value
-        else:
-            # Sub-task had an exception.
-            if return_exceptions:
-                # Get the sub-task exception to return in the list of return values.
-                ts[i] = ts[i].data
-            elif isinstance(state, int):
-                # Raise the sub-task exception, if there is not already an exception to raise.
-                state = ts[i].data
+        elif return_exceptions:
+            # Get the sub-task exception to return in the list of return values.
+            ts[i] = ts[i].data
+        elif isinstance(state, int):
+            # Raise the sub-task exception, if there is not already an exception to raise.
+            state = ts[i].data
 
     # Either this gather was cancelled, or one of the sub-tasks raised an exception with
     # return_exceptions==False, so reraise the exception here.

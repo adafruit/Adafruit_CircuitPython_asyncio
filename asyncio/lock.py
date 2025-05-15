@@ -19,6 +19,7 @@ Locks
 
 from . import core
 
+
 # Lock class for primitive mutex capability
 class Lock:
     # CIRCUITPY-CHANGE: doc
