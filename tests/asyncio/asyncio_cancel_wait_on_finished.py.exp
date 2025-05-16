@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: 2019 Damien P. George
+#
+# SPDX-License-Identifier: MIT
+main sleep
+sleep_task sleep
+wait_task wait
+main sleep
+sleep_task wake
+main wait
+CancelledError()
