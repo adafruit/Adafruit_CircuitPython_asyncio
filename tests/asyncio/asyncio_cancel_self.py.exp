@@ -1,0 +1,5 @@
+# SPDX-FileCopyrightText: 2019 Damien P. George
+#
+# SPDX-License-Identifier: MIT
+task start
+can't cancel self
