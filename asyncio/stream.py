@@ -102,6 +102,8 @@ class Stream:
             # CIRCUITPY-CHANGE: await, not yield
             await core._io_queue.queue_read(self.s)
             l2 = self.s.readline()  # may do multiple reads but won't block
+            if l2 is None:
+                continue
             l += l2
             if not l2 or l[-1] == 10:  # \n (check l in case l2 is str)
                 return l
@@ -126,7 +128,10 @@ class Stream:
         # CIRCUITPY-CHANGE: doc
         """Drain (write) all buffered output data out to the stream.
         """
-
+        if not self.out_buf:
+            # Drain must always yield, so a tight loop of write+drain can't block the scheduler.
+            # CIRCUITPYTHON-CHANGE: await
+            return (await core.sleep_ms(0))
         mv = memoryview(self.out_buf)
         off = 0
         while off < len(mv):
@@ -199,6 +204,9 @@ class Server:
         # CIRCUITPY-CHANGE: doc
         """Close the server."""
 
+        # Note: the _serve task must have already started by now due to the sleep
+        # in start_server, so `state` won't be clobbered at the start of _serve.
+        self.state = True
         self.task.cancel()
 
     async def wait_closed(self):
@@ -255,11 +263,11 @@ async def start_server(cb, host, port, backlog=5):
     import socket
 
     # Create and bind server socket.
-    host = socket.getaddrinfo(host, port)[0]  # TODO this is blocking!
-    s = socket.socket()
+    addr_info = socket.getaddrinfo(host, port)[0]  # TODO this is blocking!
+    s = socket.socket(addr_info[0])  # Use address family from getaddrinfo
     s.setblocking(False)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    s.bind(host[-1])
+    s.bind(addr_info[-1])
     s.listen(backlog)
 
     # Create and return server object and task.
