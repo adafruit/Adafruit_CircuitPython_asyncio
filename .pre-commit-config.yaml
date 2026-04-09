@@ -4,18 +4,18 @@
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.3.4
+    rev: v0.15.10
     hooks:
       - id: ruff-format
       - id: ruff
         args: ["--fix"]
   - repo: https://github.com/fsfe/reuse-tool
-    rev: v3.0.1
+    rev: v6.2.0
     hooks:
       - id: reuse
