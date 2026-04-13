@@ -168,6 +168,7 @@ async def gather(*aws, return_exceptions=False):
         elif isinstance(ts[i].data, StopIteration):
             # Sub-task ran to completion, get its return value.
             ts[i] = ts[i].data.value
+        # Sub-task had an exception.
         elif return_exceptions:
             # Get the sub-task exception to return in the list of return values.
             ts[i] = ts[i].data

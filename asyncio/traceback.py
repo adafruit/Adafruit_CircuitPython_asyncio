@@ -29,7 +29,8 @@ def _print_traceback(traceback, limit=None, file=sys.stderr) -> List[str]:
         name = frame_code.co_name
         print(f'  File "{filename}", line {line_number}, in {name}', file=file)
         traceback = traceback.tb_next
-        n = n + 1
+        # CIRCUITPY-CHANGE: use +=
+        n += 1
         if limit is not None and n >= limit:
             break
 

@@ -198,16 +198,18 @@ class Task:
         if self is core.cur_task:
             raise RuntimeError("can't cancel self")
         # If Task waits on another task then forward the cancel to the one it's waiting on.
-        while isinstance(self.data, Task):
-            self = self.data
+        # CIRCUITPY-CHANGE: don't reassign self
+        task = self
+        while isinstance(task.data, Task):
+            task = task.data
         # Reschedule Task as a cancelled task.
-        if hasattr(self.data, "remove"):
+        if hasattr(task.data, "remove"):
             # Not on the main running queue, remove the task from the queue it's on.
-            self.data.remove(self)
-            core._task_queue.push(self)
-        elif core.ticks_diff(self.ph_key, core.ticks()) > 0:
+            task.data.remove(task)
+            core._task_queue.push(task)
+        elif core.ticks_diff(task.ph_key, core.ticks()) > 0:
             # On the main running queue but scheduled in the future, so bring it forward to now.
-            core._task_queue.remove(self)
-            core._task_queue.push(self)
-        self.data = core.CancelledError
+            core._task_queue.remove(task)
+            core._task_queue.push(task)
+        task.data = core.CancelledError
         return True
