@@ -355,7 +355,12 @@ def run(coro):
     Returns the value returned by *coro*.
     """
 
-    return run_until_complete(create_task(coro))
+    # CIRCUITPY-CHANGE: catch asyncio.run() inside asyncio.run()
+    # Change from https://github.com/micropython/micropython/issues/15187
+    if cur_task is None:
+        return run_until_complete(create_task(coro))
+    else:
+        raise RuntimeError("asyncio.run() cannot be called from a running event loop")
 
 
 ################################################################################
