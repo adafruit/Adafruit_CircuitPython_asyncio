@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: 2019 Damien P. George
+#
+# SPDX-License-Identifier: MIT
+==========
+False
+task start
+task done
+True
+True
+==========
+False
+task start
+False
+task done
+True
+==========
+False
+task start
+True
+ValueError()
+True
+==========
+False
+task start
+False
+ValueError()
+True

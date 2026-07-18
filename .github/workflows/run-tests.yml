@@ -1,0 +1,63 @@
+# SPDX-FileCopyrightText: 2014 MicroPython & CircuitPython contributors (https://github.com/adafruit/circuitpython/graphs/contributors)
+#
+# SPDX-License-Identifier: MIT
+
+name: Run tests
+
+on:
+  workflow_call:
+    inputs:
+      cp-version:
+        required: true
+        type: string
+
+jobs:
+  run:
+    runs-on: ubuntu-22.04
+    env:
+      CP_VERSION: ${{ inputs.cp-version }}
+    steps:
+    - name: Set up repository
+      uses: actions/checkout@v3
+      with:
+        submodules: false
+        fetch-depth: 1
+    - name: Set up circuitpython repository
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ inputs.cp-version }}
+        repository: adafruit/circuitpython
+        path: ./circuitpython/
+        submodules: false
+        fetch-depth: 1
+        fetch-tags: true
+    - name: Set up python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
+    - name: CircuitPython dependencies
+      id: cp-deps
+      run: python tools/ci_fetch_deps.py tests
+      shell: bash
+      working-directory: ./circuitpython/
+    - name: Fetch relevant submodules
+      id: submodules
+      run: python tools/ci_fetch_deps.py tests
+      working-directory: ./circuitpython
+    - name: Install python dependencies
+      run: pip install -r requirements-dev.txt
+      shell: bash
+      working-directory: ./circuitpython/
+    - name: Build mpy-cross
+      run: make -C mpy-cross -j2
+      working-directory: ./circuitpython/
+    - name: Build unix port
+      run: make -C ports/unix VARIANT=coverage BUILD=build-coverage PROG=micropython -j2
+      working-directory: ./circuitpython/
+    - name: Run tests
+      run: ./run_tests.py
+      working-directory: tests
+      env:
+        MICROPY_CPYTHON3: python3.8
+        MICROPY_MICROPYTHON: ../circuitpython/ports/unix/build-coverage/micropython
+        MICROPYPATH: ../:../circuitpython/frozen/Adafruit_CircuitPython_Ticks
